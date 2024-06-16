@@ -3,6 +3,7 @@ package cmd
 import (
 	"log/slog"
 	"os"
+	"strings"
 
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
@@ -47,6 +48,27 @@ func initConfig() {
 	viper.AutomaticEnv()
 
 	if err := viper.ReadInConfig(); err == nil {
+		setLogLevel()
 		slog.Debug("using config file", "path", viper.ConfigFileUsed())
 	}
+}
+
+func setLogLevel() {
+	levelStr := viper.GetString("log.level")
+	level := getLogLevel(levelStr)
+	slog.SetLogLoggerLevel(level)
+}
+
+func getLogLevel(level string) slog.Level {
+	switch strings.ToLower(level) {
+	case "debug":
+		return slog.LevelDebug
+	case "info":
+		return slog.LevelInfo
+	case "warn", "warning":
+		return slog.LevelWarn
+	case "error":
+		return slog.LevelError
+	}
+	return slog.LevelInfo
 }
