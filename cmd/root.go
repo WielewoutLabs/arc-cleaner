@@ -1,12 +1,22 @@
 package cmd
 
 import (
+	"context"
 	"log/slog"
 	"os"
 	"strings"
 
+	"github.com/actions/actions-runner-controller/apis/actions.github.com/v1alpha1"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
+	"sigs.k8s.io/controller-runtime/pkg/client"
+
+	"github.com/wielewout/arc-cleaner/internal/kubernetes"
+)
+
+var (
+	version string
+	commit  string
 )
 
 var cfgFile string
@@ -18,6 +28,21 @@ var rootCmd = &cobra.Command{
 Actions Runner Controller (ARC).`,
 	Run: func(cmd *cobra.Command, args []string) {
 		slog.Info("started arc-cleaner", "version", version, "commit", commit)
+
+		k8sClient, err := kubernetes.NewClient()
+		if err != nil {
+			slog.Error("failed to create kubernetes client", "error", err.Error())
+		}
+
+		ephemeralRunnerSetList := new(v1alpha1.EphemeralRunnerSetList)
+		if err := k8sClient.List(context.Background(), ephemeralRunnerSetList, client.InNamespace("arc-runners")); err != nil {
+			slog.Error("failed to list ephemeral runner sets", "error", err.Error())
+		}
+
+		slog.Debug("listed ephemeral runner set", "length", len(ephemeralRunnerSetList.Items))
+		for index, ephemeralRunnerSet := range ephemeralRunnerSetList.Items {
+			slog.Debug("ephemeral runner set", "index", index, "name", ephemeralRunnerSet.Name)
+		}
 	},
 }
 
