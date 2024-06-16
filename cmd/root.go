@@ -27,23 +27,24 @@ var rootCmd = &cobra.Command{
 	Long: `ARC cleaner is an application to clean up resources from the GitHub
 Actions Runner Controller (ARC).`,
 	Run: func(cmd *cobra.Command, args []string) {
-		slog.Info("started arc-cleaner", "version", version, "commit", commit)
+		logger := slog.Default()
+		logger.Info("started arc-cleaner", "version", version, "commit", commit)
 
 		k8sClient, err := kubernetes.NewClient()
 		if err != nil {
-			slog.Error("failed to create kubernetes client", "error", err.Error())
+			logger.Error("failed to create kubernetes client", "error", err.Error())
 		}
 
 		namespace := viper.GetString("namespace")
 
 		ephemeralRunnerSetList := new(v1alpha1.EphemeralRunnerSetList)
 		if err := k8sClient.List(context.Background(), ephemeralRunnerSetList, client.InNamespace(namespace)); err != nil {
-			slog.Error("failed to list ephemeral runner sets", "namespace", namespace, "error", err.Error())
+			logger.Error("failed to list ephemeral runner sets", "namespace", namespace, "error", err.Error())
 		}
 
-		slog.Debug("listed ephemeral runner set", "namespace", namespace, "length", len(ephemeralRunnerSetList.Items))
+		logger.Debug("listed ephemeral runner set", "namespace", namespace, "length", len(ephemeralRunnerSetList.Items))
 		for index, ephemeralRunnerSet := range ephemeralRunnerSetList.Items {
-			slog.Debug("ephemeral runner set", "index", index, "name", ephemeralRunnerSet.Name)
+			logger.Debug("ephemeral runner set", "index", index, "name", ephemeralRunnerSet.Name)
 		}
 	},
 }
