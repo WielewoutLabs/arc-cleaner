@@ -41,31 +41,31 @@ Actions Runner Controller (ARC).`,
 		nsLogger := logger.With("namespace", namespace)
 		nsCtx := logging.WithContext(ctx, nsLogger)
 
-		ephemeralRunnerSetList := getEphemeralRunnerSetList(nsCtx, k8sClient, namespace)
-		for _, ephemeralRunnerSet := range ephemeralRunnerSetList.Items {
-			ersLogger := nsLogger.With("name", ephemeralRunnerSet.Name)
-			ersLogger.Debug("ephemeral runner set")
+		ephemeralRunnerList := getEphemeralRunnerList(nsCtx, k8sClient, namespace)
+		for _, ephemeralRunner := range ephemeralRunnerList.Items {
+			erLogger := nsLogger.With("name", ephemeralRunner.Name)
+			erLogger.Debug("ephemeral runner")
 		}
 	},
 }
 
-func getEphemeralRunnerSetList(ctx context.Context, k8sClient *kubernetes.Client, namespace string) *v1alpha1.EphemeralRunnerSetList {
+func getEphemeralRunnerList(ctx context.Context, k8sClient *kubernetes.Client, namespace string) *v1alpha1.EphemeralRunnerList {
 	logger := logging.FromContext(ctx)
 
-	ephemeralRunnerSetList := new(v1alpha1.EphemeralRunnerSetList)
+	ephemeralRunnerList := new(v1alpha1.EphemeralRunnerList)
 	err := k8sClient.List(
 		ctx,
-		ephemeralRunnerSetList,
+		ephemeralRunnerList,
 		client.InNamespace(namespace),
 	)
 
 	if err != nil {
-		logger.Error("failed to list ephemeral runner sets", "error", err.Error())
-		return ephemeralRunnerSetList
+		logger.Error("failed to list ephemeral runners", "error", err.Error())
+		return ephemeralRunnerList
 	}
 
-	logger.Debug("listed ephemeral runner sets", "length", len(ephemeralRunnerSetList.Items))
-	return ephemeralRunnerSetList
+	logger.Debug("listed ephemeral runners", "length", len(ephemeralRunnerList.Items))
+	return ephemeralRunnerList
 }
 
 func Execute() {
