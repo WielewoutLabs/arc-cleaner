@@ -4,7 +4,6 @@ import (
 	"context"
 	"log/slog"
 	"os"
-	"strings"
 
 	"github.com/actions/actions-runner-controller/apis/actions.github.com/v1alpha1"
 	"github.com/spf13/cobra"
@@ -12,6 +11,7 @@ import (
 	"sigs.k8s.io/controller-runtime/pkg/client"
 
 	"github.com/wielewout/arc-cleaner/internal/kubernetes"
+	"github.com/wielewout/arc-cleaner/internal/logging"
 )
 
 var (
@@ -75,27 +75,9 @@ func initConfig() {
 	viper.AutomaticEnv()
 
 	if err := viper.ReadInConfig(); err == nil {
-		setLogLevel()
+		level := viper.GetString("log.level")
+		logging.SetLevel(level)
+
 		slog.Debug("using config file", "path", viper.ConfigFileUsed())
 	}
-}
-
-func setLogLevel() {
-	levelStr := viper.GetString("log.level")
-	level := getLogLevel(levelStr)
-	slog.SetLogLoggerLevel(level)
-}
-
-func getLogLevel(level string) slog.Level {
-	switch strings.ToLower(level) {
-	case "debug":
-		return slog.LevelDebug
-	case "info":
-		return slog.LevelInfo
-	case "warn", "warning":
-		return slog.LevelWarn
-	case "error":
-		return slog.LevelError
-	}
-	return slog.LevelInfo
 }
