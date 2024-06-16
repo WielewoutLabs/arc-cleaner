@@ -27,6 +27,7 @@ var rootCmd = &cobra.Command{
 	Long: `ARC cleaner is an application to clean up resources from the GitHub
 Actions Runner Controller (ARC).`,
 	Run: func(cmd *cobra.Command, args []string) {
+		ctx := context.Background()
 		logger := slog.Default()
 		logger.Info("started arc-cleaner", "version", version, "commit", commit)
 
@@ -38,18 +39,33 @@ Actions Runner Controller (ARC).`,
 		namespace := viper.GetString("namespace")
 
 		nsLogger := logger.With("namespace", namespace)
+		nsCtx := logging.WithContext(ctx, nsLogger)
 
-		ephemeralRunnerSetList := new(v1alpha1.EphemeralRunnerSetList)
-		if err := k8sClient.List(context.Background(), ephemeralRunnerSetList, client.InNamespace(namespace)); err != nil {
-			nsLogger.Error("failed to list ephemeral runner sets", "error", err.Error())
-		}
-
-		nsLogger.Debug("listed ephemeral runner set", "length", len(ephemeralRunnerSetList.Items))
-		for index, ephemeralRunnerSet := range ephemeralRunnerSetList.Items {
+		ephemeralRunnerSetList := getEphemeralRunnerSetList(nsCtx, k8sClient, namespace)
+		for _, ephemeralRunnerSet := range ephemeralRunnerSetList.Items {
 			ersLogger := nsLogger.With("name", ephemeralRunnerSet.Name)
-			ersLogger.Debug("ephemeral runner set", "index", index)
+			ersLogger.Debug("ephemeral runner set")
 		}
 	},
+}
+
+func getEphemeralRunnerSetList(ctx context.Context, k8sClient *kubernetes.Client, namespace string) *v1alpha1.EphemeralRunnerSetList {
+	logger := logging.FromContext(ctx)
+
+	ephemeralRunnerSetList := new(v1alpha1.EphemeralRunnerSetList)
+	err := k8sClient.List(
+		ctx,
+		ephemeralRunnerSetList,
+		client.InNamespace(namespace),
+	)
+
+	if err != nil {
+		logger.Error("failed to list ephemeral runner sets", "error", err.Error())
+		return ephemeralRunnerSetList
+	}
+
+	logger.Debug("listed ephemeral runner sets", "length", len(ephemeralRunnerSetList.Items))
+	return ephemeralRunnerSetList
 }
 
 func Execute() {
