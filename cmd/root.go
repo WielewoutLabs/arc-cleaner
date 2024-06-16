@@ -17,7 +17,7 @@ var rootCmd = &cobra.Command{
 	Long: `ARC cleaner is an application to clean up resources from the GitHub
 Actions Runner Controller (ARC).`,
 	Run: func(cmd *cobra.Command, args []string) {
-		slog.Info("started arc-cleaner")
+		slog.Info("started arc-cleaner", "version", version, "commit", commit)
 	},
 }
 
