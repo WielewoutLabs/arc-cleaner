@@ -11,6 +11,7 @@ import (
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
 	corev1 "k8s.io/api/core/v1"
+	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/types"
 	"sigs.k8s.io/controller-runtime/pkg/client"
 
@@ -99,6 +100,10 @@ func cleanEphemeralRunnerPods(ctx context.Context, k8sClient *kubernetes.Client,
 	logger.Debug(fmt.Sprintf("workflow pod status is %s", strings.ToLower(string(workflowPodStatus))))
 
 	opts := &client.DeleteOptions{}
+	if viper.GetBool("dryrun") {
+		opts.DryRun = []string{metav1.DryRunAll}
+		logger.Debug("dry run to delete worflow pod")
+	}
 	err = k8sClient.Delete(ctx, workflowPod, opts)
 	if err != nil {
 		logger.Error("failed deleting workflow pod", "error", err.Error())
