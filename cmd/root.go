@@ -37,14 +37,17 @@ Actions Runner Controller (ARC).`,
 
 		namespace := viper.GetString("namespace")
 
+		nsLogger := logger.With("namespace", namespace)
+
 		ephemeralRunnerSetList := new(v1alpha1.EphemeralRunnerSetList)
 		if err := k8sClient.List(context.Background(), ephemeralRunnerSetList, client.InNamespace(namespace)); err != nil {
-			logger.Error("failed to list ephemeral runner sets", "namespace", namespace, "error", err.Error())
+			nsLogger.Error("failed to list ephemeral runner sets", "error", err.Error())
 		}
 
-		logger.Debug("listed ephemeral runner set", "namespace", namespace, "length", len(ephemeralRunnerSetList.Items))
+		nsLogger.Debug("listed ephemeral runner set", "length", len(ephemeralRunnerSetList.Items))
 		for index, ephemeralRunnerSet := range ephemeralRunnerSetList.Items {
-			logger.Debug("ephemeral runner set", "index", index, "name", ephemeralRunnerSet.Name)
+			ersLogger := nsLogger.With("name", ephemeralRunnerSet.Name)
+			ersLogger.Debug("ephemeral runner set", "index", index)
 		}
 	},
 }
