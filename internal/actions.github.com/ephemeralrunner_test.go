@@ -104,3 +104,17 @@ func (ts *EphemeralRunnerReconcilerTestSuite) TestShouldKeepWorkflowPodWhenRunne
 
 	ts.requirePod(ts.workflowNamespacedName)
 }
+
+func (ts *EphemeralRunnerReconcilerTestSuite) TestShouldKeepWorkflowPodWhenDryRun() {
+	_, err := createRunnerPod(ts.k8sClient, ts.runnerNamespacedName, corev1.PodPending)
+	ts.Require().NoError(err)
+
+	_, err = createWorkflowPod(ts.k8sClient, ts.runnerNamespacedName)
+	ts.Require().NoError(err)
+
+	controller := actionsgithubcom.NewEphemeralRunnerReconciler(ts.k8sClient, actionsgithubcom.WithDryRun(true))
+	err = controller.Reconcile(context.Background(), ts.runnerNamespacedName)
+	ts.Require().NoError(err)
+
+	ts.requirePod(ts.workflowNamespacedName)
+}

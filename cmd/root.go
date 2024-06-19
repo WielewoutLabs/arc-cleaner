@@ -46,9 +46,14 @@ the runner can become available again.`,
 		}
 
 		namespace := viper.GetString("namespace")
+		dryRun := viper.GetBool("dryrun")
+
 		ephemeralRunnerList := getEphemeralRunnerList(ctx, k8sClient, namespace)
 		for _, ephemeralRunner := range ephemeralRunnerList.Items {
-			controller := actionsgithubcom.NewEphemeralRunnerReconciler(k8sClient)
+			controller := actionsgithubcom.NewEphemeralRunnerReconciler(
+				k8sClient,
+				actionsgithubcom.WithDryRun(dryRun),
+			)
 			controller.Reconcile(ctx, types.NamespacedName{
 				Name:      ephemeralRunner.GetName(),
 				Namespace: ephemeralRunner.GetNamespace(),

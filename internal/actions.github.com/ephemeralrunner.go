@@ -5,7 +5,6 @@ import (
 	"fmt"
 	"strings"
 
-	"github.com/spf13/viper"
 	corev1 "k8s.io/api/core/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/types"
@@ -16,12 +15,20 @@ import (
 
 type EphemeralRunnerReconciler struct {
 	k8sClient client.Client
+	DryRun    bool
 }
 
-func NewEphemeralRunnerReconciler(k8sClient client.Client) *EphemeralRunnerReconciler {
-	return &EphemeralRunnerReconciler{
+func NewEphemeralRunnerReconciler(k8sClient client.Client, opts ...EphemeralRunnerReconcilerOption) *EphemeralRunnerReconciler {
+	controller := &EphemeralRunnerReconciler{
 		k8sClient: k8sClient,
+		DryRun:    false,
 	}
+
+	for _, opt := range opts {
+		opt.apply(controller)
+	}
+
+	return controller
 }
 
 func (r *EphemeralRunnerReconciler) Reconcile(ctx context.Context, namespacedName types.NamespacedName) error {
@@ -101,7 +108,7 @@ func (r *EphemeralRunnerReconciler) deleteWorkflowPod(ctx context.Context, workf
 	logger := logging.FromContext(ctx)
 
 	opts := &client.DeleteOptions{}
-	if viper.GetBool("dryrun") {
+	if r.DryRun {
 		opts.DryRun = []string{metav1.DryRunAll}
 		logger.Debug("dry run to delete worflow pod")
 	}
