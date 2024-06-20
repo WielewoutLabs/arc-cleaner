@@ -14,6 +14,7 @@ import (
 	actionsgithubcom "github.com/wielewout/arc-cleaner/internal/actions.github.com"
 	"github.com/wielewout/arc-cleaner/internal/kubernetes"
 	"github.com/wielewout/arc-cleaner/internal/logging"
+	"github.com/wielewout/arc-cleaner/internal/signals"
 )
 
 var (
@@ -36,7 +37,7 @@ then the runner gets stuck waiting indefinitely for storage.
 By cleaning up the workflow pod and thus detaching the volume,
 the runner can become available again.`,
 	Run: func(cmd *cobra.Command, args []string) {
-		ctx := context.Background()
+		ctx := signals.NewContextWithSignals()
 		logger := slog.Default()
 		logger.Info("started arc-cleaner", "version", version, "commit", commit)
 
