@@ -3,5 +3,5 @@ log:
   level: debug
 
 namespace: arc-runners
-
+period: 5s
 dryrun: true

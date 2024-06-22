@@ -20,6 +20,20 @@ func WithNamespace(namespace string) optionWithNamespace {
 	}
 }
 
+type optionWithPeriod struct {
+	period time.Duration
+}
+
+func (o optionWithPeriod) apply(a *App) {
+	a.period = o.period
+}
+
+func WithPeriod(period time.Duration) optionWithPeriod {
+	return optionWithPeriod{
+		period: period,
+	}
+}
+
 type optionWithDryRun struct {
 	dryRun bool
 }

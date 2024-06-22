@@ -48,6 +48,9 @@ the runner can become available again.`,
 		if viper.IsSet("namespace") {
 			appOptions = append(appOptions, app.WithNamespace(viper.GetString("namespace")))
 		}
+		if viper.IsSet("period") {
+			appOptions = append(appOptions, app.WithPeriod(viper.GetDuration("period")))
+		}
 		if viper.IsSet("dryrun") {
 			appOptions = append(appOptions, app.WithDryRun(viper.GetBool("dryrun")))
 		}
