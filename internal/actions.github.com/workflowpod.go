@@ -64,7 +64,7 @@ func (r *WorkflowPodReconciler) Reconcile(ctx context.Context, namespacedName ty
 	} else {
 		logger.Debug("ephemeral runner exists")
 
-		runnerPod, err := r.getRunnerPod(ctx, runnerNamespacedName)
+		runnerPod, err := getRunnerPod(ctx, r.k8sClient, runnerNamespacedName)
 		if err != nil {
 			logger.Debug("runner pod does not exist")
 		} else {
@@ -80,12 +80,4 @@ func (r *WorkflowPodReconciler) Reconcile(ctx context.Context, namespacedName ty
 	}
 
 	return deleteWorkflowPod(ctx, r.k8sClient, workflowPod, deleteWorkflowPodOptions{dryRun: r.DryRun})
-}
-
-func (r *WorkflowPodReconciler) getRunnerPod(ctx context.Context, namespacedName types.NamespacedName) (*corev1.Pod, error) {
-	return getRunnerPod(ctx, r.k8sClient, namespacedName)
-}
-
-func (r *WorkflowPodReconciler) getWorkflowPod(ctx context.Context, namespacedName types.NamespacedName) (*corev1.Pod, error) {
-	return getWorkflowPod(ctx, r.k8sClient, namespacedName)
 }
