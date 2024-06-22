@@ -1,17 +1,13 @@
 package cmd
 
 import (
-	"context"
 	"log/slog"
 	"os"
 
-	githubarcv1alpha1 "github.com/actions/actions-runner-controller/apis/actions.github.com/v1alpha1"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
-	"k8s.io/apimachinery/pkg/types"
-	"sigs.k8s.io/controller-runtime/pkg/client"
 
-	actionsgithubcom "github.com/wielewout/arc-cleaner/internal/actions.github.com"
+	"github.com/wielewout/arc-cleaner/internal/app"
 	"github.com/wielewout/arc-cleaner/internal/kubernetes"
 	"github.com/wielewout/arc-cleaner/internal/logging"
 	"github.com/wielewout/arc-cleaner/internal/signals"
@@ -38,6 +34,7 @@ By cleaning up the workflow pod and thus detaching the volume,
 the runner can become available again.`,
 	Run: func(cmd *cobra.Command, args []string) {
 		ctx := signals.NewContextWithSignals()
+
 		logger := slog.Default()
 		logger.Info("started arc-cleaner", "version", version, "commit", commit)
 
@@ -47,41 +44,19 @@ the runner can become available again.`,
 			return
 		}
 
-		namespace := viper.GetString("namespace")
-		dryRun := viper.GetBool("dryrun")
-
-		ephemeralRunnerList := getEphemeralRunnerList(ctx, k8sClient, namespace)
-		for _, ephemeralRunner := range ephemeralRunnerList.Items {
-			controller := actionsgithubcom.NewEphemeralRunnerReconciler(
-				k8sClient,
-				actionsgithubcom.WithDryRun(dryRun),
-			)
-			controller.Reconcile(ctx, types.NamespacedName{
-				Name:      ephemeralRunner.GetName(),
-				Namespace: ephemeralRunner.GetNamespace(),
-			})
+		appOptions := []app.Option{}
+		if viper.IsSet("namespace") {
+			appOptions = append(appOptions, app.WithNamespace(viper.GetString("namespace")))
 		}
+		if viper.IsSet("dryrun") {
+			appOptions = append(appOptions, app.WithDryRun(viper.GetBool("dryrun")))
+		}
+
+		app := app.New(k8sClient, appOptions...)
+		app.Start(ctx)
+
+		logger.Debug("exiting arc-cleaner gracefully")
 	},
-}
-
-func getEphemeralRunnerList(ctx context.Context, k8sClient *kubernetes.Client, namespace string) *githubarcv1alpha1.EphemeralRunnerList {
-	logger := logging.FromContext(ctx).
-		With("namespace", namespace)
-
-	ephemeralRunnerList := new(githubarcv1alpha1.EphemeralRunnerList)
-	err := k8sClient.List(
-		ctx,
-		ephemeralRunnerList,
-		client.InNamespace(namespace),
-	)
-
-	if err != nil {
-		logger.Error("failed to list ephemeral runners", "error", err.Error())
-		return ephemeralRunnerList
-	}
-
-	logger.Debug("listed ephemeral runners", "length", len(ephemeralRunnerList.Items))
-	return ephemeralRunnerList
 }
 
 func Execute() {
