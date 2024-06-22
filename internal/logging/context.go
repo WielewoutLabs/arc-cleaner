@@ -8,7 +8,7 @@ import (
 type ctxKey struct{}
 
 func WithContext(ctx context.Context, logger *slog.Logger) context.Context {
-	return context.WithValue(context.Background(), ctxKey{}, logger)
+	return context.WithValue(ctx, ctxKey{}, logger)
 }
 
 func FromContext(ctx context.Context) *slog.Logger {
