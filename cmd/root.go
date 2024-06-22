@@ -44,6 +44,7 @@ the runner can become available again.`,
 		k8sClient, err := kubernetes.NewClient()
 		if err != nil {
 			logger.Error("failed to create kubernetes client", "error", err.Error())
+			return
 		}
 
 		namespace := viper.GetString("namespace")
