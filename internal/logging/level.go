@@ -6,11 +6,11 @@ import (
 )
 
 func SetLevel(level string) {
-	slogLevel := getLevel(level)
+	slogLevel := toSlogLevel(level)
 	slog.SetLogLoggerLevel(slogLevel)
 }
 
-func getLevel(level string) slog.Level {
+func toSlogLevel(level string) slog.Level {
 	switch strings.ToLower(level) {
 	case "debug":
 		return slog.LevelDebug
