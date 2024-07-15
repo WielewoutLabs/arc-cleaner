@@ -7,12 +7,14 @@ import (
 
 type ctxKey struct{}
 
+var key = ctxKey{}
+
 func WithContext(ctx context.Context, logger *slog.Logger) context.Context {
-	return context.WithValue(ctx, ctxKey{}, logger)
+	return context.WithValue(ctx, key, logger)
 }
 
 func FromContext(ctx context.Context) *slog.Logger {
-	logger := ctx.Value(ctxKey{})
+	logger := ctx.Value(key)
 	if logger != nil {
 		switch logger := logger.(type) {
 		case *slog.Logger:
