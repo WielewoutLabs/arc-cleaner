@@ -21,7 +21,7 @@ jobs:
         with:
           go-version: stable
       - name: Build binary
-        run: make build
+        run: make build ${{ github.ref_type == 'tag' && format('VERSION={0}', github.ref_name) || '' }}
       - name: Run tests
         run: make test
       - name: Run golangci-lint
