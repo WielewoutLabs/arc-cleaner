@@ -4,7 +4,7 @@ import (
 	"context"
 	"time"
 
-	githubarcv1alpha1 "github.com/actions/actions-runner-controller/apis/actions.github.com/v1alpha1"
+	corev1 "k8s.io/api/core/v1"
 	"k8s.io/apimachinery/pkg/types"
 	"sigs.k8s.io/controller-runtime/pkg/client"
 
@@ -57,35 +57,35 @@ func (app App) Start(ctx context.Context) {
 }
 
 func (app App) reconcile(ctx context.Context) {
-	ephemeralRunnerList := app.getEphemeralRunnerList(ctx)
-	for _, ephemeralRunner := range ephemeralRunnerList.Items {
-		controller := actionsgithubcom.NewEphemeralRunnerReconciler(
+	podList := app.getPodList(ctx)
+	for _, pod := range podList.Items {
+		controller := actionsgithubcom.NewWorkflowPodReconciler(
 			app.k8sClient,
 			actionsgithubcom.WithDryRun(app.dryRun),
 		)
-		controller.Reconcile(ctx, types.NamespacedName{
-			Name:      ephemeralRunner.GetName(),
-			Namespace: ephemeralRunner.GetNamespace(),
+		_ = controller.Reconcile(ctx, types.NamespacedName{
+			Name:      pod.GetName(),
+			Namespace: pod.GetNamespace(),
 		})
 	}
 }
 
-func (app App) getEphemeralRunnerList(ctx context.Context) *githubarcv1alpha1.EphemeralRunnerList {
+func (app App) getPodList(ctx context.Context) *corev1.PodList {
 	logger := logging.FromContext(ctx).
 		With("namespace", app.namespace)
 
-	ephemeralRunnerList := new(githubarcv1alpha1.EphemeralRunnerList)
+	podList := new(corev1.PodList)
 	err := app.k8sClient.List(
 		ctx,
-		ephemeralRunnerList,
+		podList,
 		client.InNamespace(app.namespace),
 	)
 
 	if err != nil {
-		logger.Error("failed to list ephemeral runners", "error", err.Error())
-		return ephemeralRunnerList
+		logger.Error("failed to list pods", "error", err.Error())
+		return podList
 	}
 
-	logger.Debug("listed ephemeral runners", "length", len(ephemeralRunnerList.Items))
-	return ephemeralRunnerList
+	logger.Debug("listed pods", "length", len(podList.Items))
+	return podList
 }

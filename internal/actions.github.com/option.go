@@ -1,14 +1,14 @@
 package actionsgithubcom
 
-type EphemeralRunnerReconcilerOption interface {
-	apply(*EphemeralRunnerReconciler)
+type Option interface {
+	apply(*WorkflowPodReconciler)
 }
 
 type optionWithDryRun struct {
 	dryRun bool
 }
 
-func (o optionWithDryRun) apply(c *EphemeralRunnerReconciler) {
+func (o optionWithDryRun) apply(c *WorkflowPodReconciler) {
 	c.DryRun = o.dryRun
 }
 

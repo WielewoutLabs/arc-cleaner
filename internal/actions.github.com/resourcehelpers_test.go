@@ -3,6 +3,7 @@ package actionsgithubcom_test
 import (
 	"context"
 	"fmt"
+	"strings"
 
 	githubv1alpha1 "github.com/actions/actions-runner-controller/apis/actions.github.com/v1alpha1"
 	actionsgithubcom "github.com/actions/actions-runner-controller/controllers/actions.github.com"
@@ -72,6 +73,29 @@ func createWorkflowPod(k8sClient client.Client, namespacedName types.NamespacedN
 	return workflowPod, nil
 }
 
+func createSomePod(k8sClient client.Client, namespacedName types.NamespacedName) (*corev1.Pod, error) {
+	pod := &corev1.Pod{
+		ObjectMeta: metav1.ObjectMeta{
+			Name:      namespacedName.Name,
+			Namespace: namespacedName.Namespace,
+		},
+		Spec: corev1.PodSpec{
+			Containers: []corev1.Container{
+				{
+					Name:  "web",
+					Image: "nginx:latest",
+				},
+			},
+		},
+	}
+	err := k8sClient.Create(context.Background(), pod)
+	if err != nil {
+		return nil, err
+	}
+
+	return pod, nil
+}
+
 func newEphemeralRunner(namespacedName types.NamespacedName) *githubv1alpha1.EphemeralRunner {
 	return &githubv1alpha1.EphemeralRunner{
 		ObjectMeta: metav1.ObjectMeta{
@@ -111,10 +135,14 @@ func newRunnerPod(namespacedName types.NamespacedName, status corev1.PodPhase) *
 }
 
 func newWorkflowPod(namespacedName types.NamespacedName) *corev1.Pod {
+	labels := make(map[string]string)
+	labels["runner-pod"] = strings.TrimSuffix(namespacedName.Name, "-workflow")
+
 	return &corev1.Pod{
 		ObjectMeta: metav1.ObjectMeta{
-			Name:      fmt.Sprintf("%s-workflow", namespacedName.Name),
+			Name:      namespacedName.Name,
 			Namespace: namespacedName.Namespace,
+			Labels:    labels,
 		},
 		Spec:   newRunnerPodTemplateSpec().Spec,
 		Status: corev1.PodStatus{Phase: corev1.PodRunning},
@@ -160,4 +188,23 @@ func newRunnerPodTemplateSpec() *corev1.PodTemplateSpec {
 			},
 		},
 	}
+}
+
+func getWorkflowPod(k8sClient client.Client, namespacedName types.NamespacedName) (*corev1.Pod, error) {
+	pod := new(corev1.Pod)
+	err := k8sClient.Get(
+		context.Background(),
+		namespacedName,
+		pod,
+	)
+	if err != nil {
+		return nil, err
+	}
+
+	return pod, nil
+}
+
+func deleteWorkflowPod(k8sClient client.Client, namespacedName types.NamespacedName) error {
+	workflowPod, _ := getWorkflowPod(k8sClient, namespacedName)
+	return k8sClient.Delete(context.Background(), workflowPod)
 }
