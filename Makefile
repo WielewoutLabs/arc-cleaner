@@ -12,8 +12,12 @@ GOBIN ?= $(GOPATH)/bin
 PATH := $(GOBIN):$(PATH)
 
 LD_FLAGS = -ldflags " \
-	-X github.com/wielewout/arc-cleaner/cmd.version=$(VERSION) \
-	-X github.com/wielewout/arc-cleaner/cmd.commit=$(COMMIT) \
+	-s \
+	-w \
+	-linkmode \"external\" \
+	-extldflags \"-static\" \
+	-X \"github.com/wielewout/arc-cleaner/cmd.version=$(VERSION)\" \
+	-X \"github.com/wielewout/arc-cleaner/cmd.commit=$(COMMIT)\" \
 	"
 
 .PHONY: all
