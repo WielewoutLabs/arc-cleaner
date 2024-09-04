@@ -1,2 +1,3 @@
 *
-!bin/arc-cleaner
+!bin
+!build
