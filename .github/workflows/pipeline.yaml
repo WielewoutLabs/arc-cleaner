@@ -10,25 +10,100 @@ permissions:
   contents: read
   packages: write
 
+env:
+  devcontainer: ghcr.io/wielewout/arc-cleaner-dev:edge
+
 jobs:
-  build:
-    name: Build
+  vars:
+    name: Vars
     runs-on: ubuntu-24.04
     steps:
       - name: Checkout
         uses: actions/checkout@v4.1.7
-      - name: Setup Go
-        uses: actions/setup-go@v5.0.2
+      - name: Filter paths
+        if: github.event_name != 'workflow_dispatch'
+        id: paths_filter
+        uses: dorny/paths-filter@v3.0.2
         with:
-          go-version: stable
+          filters: |
+            devcontainer:
+            - "build/devcontainer/**"
+      - name: Expose vars
+        id: vars
+        run: |-
+          echo "sha_tag=sha-${{ github.sha }}" >> $GITHUB_OUTPUT
+    outputs:
+      has_devcontainer_changed: ${{ github.event_name != 'workflow_dispatch' && steps.paths_filter.outputs.devcontainer }}
+      devcontainer: ${{ (github.event_name != 'workflow_dispatch' && steps.paths_filter.outputs.devcontainer == 'true' && format('ghcr.io/wielewout/arc-cleaner-dev:{0}', steps.vars.outputs.sha_tag)) || env.devcontainer }}
+      sha_tag: ${{ steps.vars.outputs.sha_tag }}
+
+  devcontainer:
+    name: Devcontainer
+    needs:
+      - vars
+    if: ${{ needs.vars.outputs.has_devcontainer_changed == 'true' }}
+    runs-on: ubuntu-24.04
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4.1.7
+      - name: Docker meta
+        id: meta
+        uses: docker/metadata-action@v5.5.1
+        with:
+          images: |
+            ghcr.io/wielewout/arc-cleaner-dev
+          flavor: |
+            latest=false
+          tags: |
+            type=edge
+            type=raw,value=${{ needs.vars.outputs.sha_tag }}
+      - name: Login to GitHub Container Registry
+        uses: docker/login-action@v3.3.0
+        with:
+          registry: ghcr.io
+          username: ${{ github.repository_owner }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+      - name: Install buildx
+        uses: docker/setup-buildx-action@v3.6.1
+        with:
+          install: true
+      - name: Build and push
+        uses: docker/build-push-action@v6.7.0
+        with:
+          context: .
+          file: build/devcontainer/Containerfile
+          platforms: linux/amd64
+          push: true
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
+
+  build:
+    name: Build
+    needs:
+      - vars
+      - devcontainer
+    if: |
+      !cancelled() &&
+      !contains(needs.devcontainer.result, 'failure')
+    runs-on: ubuntu-24.04
+    container:
+      image: ${{ needs.vars.outputs.devcontainer }}
+      credentials:
+        username: ${{ github.repository_owner }}
+        password: ${{ secrets.GITHUB_TOKEN }}
+      volumes:
+        - /var/run/docker.sock:/var/run/docker.sock
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4.1.7
+      - name: Make workdir safe
+        run: git config --global --add safe.directory /__w/arc-cleaner/arc-cleaner
       - name: Build
         run: make build ${{ github.ref_type == 'tag' && format('VERSION={0}', github.ref_name) || '' }}
       - name: Test
         run: make test
       - name: Lint
-        uses: golangci/golangci-lint-action@v6.1.0
-        with:
-          version: v1.60.3
+        run: make lint
       - name: Docker meta
         id: meta
         uses: docker/metadata-action@v5.5.1
@@ -43,6 +118,7 @@ jobs:
             type=semver,pattern={{version}}
             type=semver,pattern={{major}}.{{minor}}
             type=semver,pattern={{major}}
+            type=ref,event=pr
       - name: Login to GitHub Container Registry
         uses: docker/login-action@v3.3.0
         with:
@@ -54,10 +130,6 @@ jobs:
         with:
           username: ${{ secrets.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_PASSWORD }}
-      - name: Install buildx
-        uses: docker/setup-buildx-action@v3.6.1
-        with:
-          install: true
       - name: Build and push
         uses: docker/build-push-action@v6.7.0
         with:

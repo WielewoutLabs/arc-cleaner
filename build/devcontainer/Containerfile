@@ -1,0 +1,20 @@
+FROM golang:alpine@sha256:d0b31558e6b3e4cc59f6011d79905835108c919143ebecc58f35965bf79948f4
+
+ARG GOLANGCI_LINT_VERSION=1.60.3
+
+RUN apk update \
+    && apk add \
+    git \
+    make \
+    docker-cli \
+    docker-cli-buildx \
+    && go install github.com/golangci/golangci-lint/cmd/golangci-lint@v$GOLANGCI_LINT_VERSION
+
+VOLUME [ "/var/run/docker.sock" ]
+
+VOLUME [ "/go/src/github.com/wielewout/arc-cleaner" ]
+WORKDIR /go/src/github.com/wielewout/arc-cleaner
+RUN git config --global --add safe.directory /go/src/github.com/wielewout/arc-cleaner
+
+COPY --chmod=0755 build/devcontainer/entrypoint.sh /
+ENTRYPOINT [ "/entrypoint.sh" ]
