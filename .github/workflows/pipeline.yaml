@@ -211,20 +211,17 @@ jobs:
           asset_path: bin/arc-cleaner-*
 
       - name: Login to GitHub Container Registry
-        if: ${{ steps.release_please.outputs.releases_created == 'true' }}
         uses: docker/login-action@v3.3.0
         with:
           registry: ghcr.io
           username: ${{ github.repository_owner }}
           password: ${{ secrets.GITHUB_TOKEN }}
       - name: Login to Docker Hub
-        if: ${{ steps.release_please.outputs.releases_created == 'true' }}
         uses: docker/login-action@v3.3.0
         with:
           username: ${{ secrets.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_PASSWORD }}
       - name: Release container images
-        if: ${{ steps.release_please.outputs.releases_created == 'true' }}
         id: container_images
         run: |-
           release_container_images=()
