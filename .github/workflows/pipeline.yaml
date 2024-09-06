@@ -33,6 +33,7 @@ jobs:
         run: |-
           echo "sha_tag=sha-${{ github.sha }}" >> $GITHUB_OUTPUT
     outputs:
+      is_main_branch: ${{ github.ref_type == 'branch' && github.ref_name == 'main' }}
       has_devcontainer_changed: ${{ github.event_name != 'workflow_dispatch' && steps.paths_filter.outputs.devcontainer }}
       devcontainer: ${{ (github.event_name != 'workflow_dispatch' && steps.paths_filter.outputs.devcontainer == 'true' && format('ghcr.io/wielewout/arc-cleaner-dev:{0}', steps.vars.outputs.sha_tag)) || env.devcontainer }}
       sha_tag: ${{ steps.vars.outputs.sha_tag }}
@@ -99,26 +100,24 @@ jobs:
       - name: Make workdir safe
         run: git config --global --add safe.directory /__w/arc-cleaner/arc-cleaner
       - name: Build
-        run: make build ${{ github.ref_type == 'tag' && format('VERSION={0}', github.ref_name) || '' }}
+        run: >-
+          GOOS=linux
+          GOARCH=amd64
+          make build
+          WITH_OS_ARCH_SUFFIX=true
+          ${{ github.ref_type == 'tag' && format('VERSION={0}', github.ref_name) || '' }}
       - name: Test
         run: make test
       - name: Lint
         run: make lint
-      - name: Docker meta
-        id: meta
-        uses: docker/metadata-action@v5.5.1
+      - name: Upload binary
+        uses: actions/upload-artifact@v4.4.0
         with:
-          images: |
-            ghcr.io/wielewout/arc-cleaner
-            wielewout/arc-cleaner
-          flavor: |
-            latest=false
-          tags: |
-            type=edge
-            type=semver,pattern={{version}}
-            type=semver,pattern={{major}}.{{minor}}
-            type=semver,pattern={{major}}
-            type=ref,event=pr
+          name: binaries
+          path: |
+            bin/arc-cleaner-linux-amd64
+          if-no-files-found: error
+
       - name: Login to GitHub Container Registry
         uses: docker/login-action@v3.3.0
         with:
@@ -130,12 +129,141 @@ jobs:
         with:
           username: ${{ secrets.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_PASSWORD }}
+      - name: Docker meta
+        id: meta
+        uses: docker/metadata-action@v5.5.1
+        with:
+          images: |
+            ghcr.io/wielewout/arc-cleaner
+            wielewout/arc-cleaner
+          flavor: |
+            latest=false
+            suffix=-rc
+          tags: |
+            type=edge
+            type=semver,pattern={{version}}
+            type=semver,pattern={{major}}.{{minor}}
+            type=semver,pattern={{major}}
+            type=ref,event=pr
       - name: Build and push
         uses: docker/build-push-action@v6.7.0
         with:
           context: .
           file: build/container/Containerfile
           platforms: linux/amd64
+          build-args: |
+            WITH_OS_ARG_SUFFIX=true
           push: true
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
+          annotations: ${{ steps.meta.outputs.annotations }}
+    outputs:
+      images: ${{ steps.meta.outputs.tags }}
+
+  release:
+    name: Release
+    needs:
+      - vars
+      - build
+    if: |
+      !cancelled() &&
+      !contains(needs.build.result, 'failure') &&
+      needs.vars.outputs.is_main_branch == 'true'
+    permissions:
+      contents: write
+      pull-requests: write
+      packages: write
+    runs-on: ubuntu-24.04
+    steps:
+      - name: Release please
+        id: release_please
+        uses: googleapis/release-please-action@v4.1.3
+        with:
+          target-branch: ${{ github.ref_name }}
+          config-file: .github/release-please.json
+
+      - name: Download binaries
+        if: ${{ steps.release_please.outputs.releases_created == 'true' }}
+        uses: actions/download-artifact@v4.1.8
+        with:
+          pattern: binaries
+          merge-multiple: true
+      - name: Add version to binary names
+        if: ${{ steps.release_please.outputs.releases_created == 'true' }}
+        id: binaries
+        run: |-
+          release_binaries=()
+          for binary in bin/* ; do
+            suffix=${binary#"bin/arc-cleaner-"}
+            release_binary="bin/arc-cleaner-${{ steps.release_please.outputs.tag_name }}-$suffix"
+            mv $binary $release_binary
+            release_binaries+=("arc-cleaner-${{ steps.release_please.outputs.tag_name }}-$suffix")
+          done
+          echo "binaries=${release_binaries[*]}" >> $GITHUB_OUTPUT
+      - name: Release binaries
+        if: ${{ steps.release_please.outputs.releases_created == 'true' }}
+        uses: shogo82148/actions-upload-release-asset@v1.7.7
+        with:
+          upload_url: ${{ steps.release_please.outputs.upload_url }}
+          asset_path: bin/arc-cleaner-*
+
+      - name: Login to GitHub Container Registry
+        if: ${{ steps.release_please.outputs.releases_created == 'true' }}
+        uses: docker/login-action@v3.3.0
+        with:
+          registry: ghcr.io
+          username: ${{ github.repository_owner }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+      - name: Login to Docker Hub
+        if: ${{ steps.release_please.outputs.releases_created == 'true' }}
+        uses: docker/login-action@v3.3.0
+        with:
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
+      - name: Release container images
+        if: ${{ steps.release_please.outputs.releases_created == 'true' }}
+        id: container_images
+        run: |-
+          release_container_images=()
+          rc_images="${{ needs.build.outputs.images }}"
+          while IFS= read -r rc_image ; do
+            release_image=${rc_image%"-rc"}
+            echo "Retagging $rc_image to $release_image"
+            docker image pull $rc_image
+            docker image tag $rc_image $release_image
+            docker image push $release_image
+            release_container_images+=($release_image)
+          done <<< "$rc_images"
+          echo "container_images=${release_container_images[*]}" >> $GITHUB_OUTPUT
+
+      - name: Add step summary
+        if: ${{ steps.release_please.outputs.releases_created == 'true' }}
+        run: |-
+          binaries=""
+          for binary in ${{ steps.binaries.outputs.binaries }} ; do
+            binaries="$binaries* `$binary`\n"
+          done
+
+          container_images=""
+          for container_image in ${{ steps.container_images.outputs.container_images }} ; do
+            container_images="$container_images* `$container_image`\n"
+          done
+
+          cat << EOF >> $GITHUB_STEP_SUMMARY
+          # Release ${{ steps.release_please.outputs.tag_name }}
+
+          ## Binaries
+
+          $binaries
+
+          ## Container images
+
+          $container_images
+
+          <br/>
+
+          ---
+
+          More info: [${{ steps.release_please.outputs.html_url }}](${{ steps.release_please.outputs.html_url }})
+
+          EOF

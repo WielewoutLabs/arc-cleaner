@@ -4,6 +4,11 @@ ROOT := $(dir $(MAKEFILE_PATH))
 BINARY_NAME=arc-cleaner
 VERSION=""
 COMMIT := $(shell git rev-parse --verify HEAD)
+ifeq ($(WITH_OS_ARCH_SUFFIX), true)
+	OS := $(shell go env GOOS)
+	ARCH := $(shell go env GOARCH)
+	BINARY_NAME := $(BINARY_NAME)-$(OS)-$(ARCH)
+endif
 
 PKG := ./...
 
