@@ -235,9 +235,7 @@ jobs:
           while IFS= read -r rc_image ; do
             release_image=${rc_image%"-rc"}
             echo "Retagging $rc_image to $release_image"
-            docker image pull $rc_image
-            docker image tag $rc_image $release_image
-            docker image push $release_image
+            docker buildx imagetools create --tag $release_image $rc_image
             release_container_images+=($release_image)
           done <<< "$rc_images"
           echo "container_images=${release_container_images[*]}" >> $GITHUB_OUTPUT
