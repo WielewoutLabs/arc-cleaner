@@ -170,8 +170,7 @@ jobs:
       - build
     if: |
       !cancelled() &&
-      !contains(needs.build.result, 'failure') &&
-      needs.vars.outputs.is_main_branch == 'true'
+      !contains(needs.build.result, 'failure')
     permissions:
       contents: write
       pull-requests: write
@@ -179,6 +178,7 @@ jobs:
     runs-on: ubuntu-24.04
     steps:
       - name: Release please
+        if: needs.vars.outputs.is_main_branch == 'true'
         id: release_please
         uses: googleapis/release-please-action@v4.1.3
         with:
@@ -186,13 +186,17 @@ jobs:
           config-file: .github/release-please.json
 
       - name: Download binaries
-        if: ${{ steps.release_please.outputs.releases_created == 'true' }}
+        if: |
+          needs.vars.outputs.is_main_branch == 'true' &&
+          steps.release_please.outputs.releases_created == 'true'
         uses: actions/download-artifact@v4.1.8
         with:
           pattern: binaries
           merge-multiple: true
       - name: Add version to binary names
-        if: ${{ steps.release_please.outputs.releases_created == 'true' }}
+        if: |
+          needs.vars.outputs.is_main_branch == 'true' &&
+          steps.release_please.outputs.releases_created == 'true'
         id: binaries
         run: |-
           release_binaries=()
@@ -204,7 +208,9 @@ jobs:
           done
           echo "binaries=${release_binaries[*]}" >> $GITHUB_OUTPUT
       - name: Release binaries
-        if: ${{ steps.release_please.outputs.releases_created == 'true' }}
+        if: |
+          needs.vars.outputs.is_main_branch == 'true' &&
+          steps.release_please.outputs.releases_created == 'true'
         uses: shogo82148/actions-upload-release-asset@v1.7.7
         with:
           upload_url: ${{ steps.release_please.outputs.upload_url }}
@@ -237,7 +243,9 @@ jobs:
           echo "container_images=${release_container_images[*]}" >> $GITHUB_OUTPUT
 
       - name: Add step summary
-        if: ${{ steps.release_please.outputs.releases_created == 'true' }}
+        if: |
+          needs.vars.outputs.is_main_branch == 'true' &&
+          steps.release_please.outputs.releases_created == 'true'
         run: |-
           binaries=""
           for binary in ${{ steps.binaries.outputs.binaries }} ; do
