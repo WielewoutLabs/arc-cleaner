@@ -100,12 +100,10 @@ jobs:
       - name: Make workdir safe
         run: git config --global --add safe.directory /__w/arc-cleaner/arc-cleaner
       - name: Build
-        run: >-
-          GOOS=linux
-          GOARCH=amd64
-          make build
-          WITH_OS_ARCH_SUFFIX=true
-          ${{ github.ref_type == 'tag' && format('VERSION={0}', github.ref_name) || '' }}
+        run: |-
+          for arch in amd64 arm64 ; do
+            GOOS=linux GOARCH=$arch make build WITH_OS_ARCH_SUFFIX=true ${{ github.ref_type == 'tag' && format('VERSION={0}', github.ref_name) || '' }}
+          done
       - name: Test
         run: make test
       - name: Lint
@@ -116,6 +114,7 @@ jobs:
           name: binaries
           path: |
             bin/arc-cleaner-linux-amd64
+            bin/arc-cleaner-linux-arm64
           if-no-files-found: error
 
       - name: Login to GitHub Container Registry
@@ -145,12 +144,14 @@ jobs:
             type=semver,pattern={{major}}.{{minor}}
             type=semver,pattern={{major}}
             type=ref,event=pr
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v3.2.0
       - name: Build and push
         uses: docker/build-push-action@v6.7.0
         with:
           context: .
           file: build/container/Containerfile
-          platforms: linux/amd64
+          platforms: linux/amd64,linux/arm64
           build-args: |
             WITH_OS_ARG_SUFFIX=true
           push: true
