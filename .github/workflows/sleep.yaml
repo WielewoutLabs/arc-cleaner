@@ -1,0 +1,29 @@
+name: Sleep
+
+on:
+  workflow_dispatch:
+    inputs:
+      time:
+        description: "The time to sleep in seconds"
+        type: string
+        required: false
+        default: "10"
+
+jobs:
+  sleep:
+    name: Sleep
+    runs-on: ubuntu-24.04
+    container:
+      image: busybox:1.36.1-uclibc
+    steps:
+      - name: Validate time input
+        run: |
+          if ! [[ ${{ inputs.time }} =~ ^[0-9]+$ ]] ; then
+            echo "error: Provided time is not a positive integer" >&2; exit 1
+          fi
+          if ! [ ${{ inputs.time }} -le 300 ] ; then
+            echo "error: Provided time needs to be less than 300 (less than 5 minutes)" >&2 ; exit 1
+          fi
+          echo "Provided time is valid"
+      - name: Sleep
+        run: sleep ${{ inputs.time }}
