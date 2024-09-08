@@ -5,9 +5,10 @@ ARG WITH_OS_ARG_SUFFIX=false
 COPY bin/ /app/bin/
 RUN binary="arc-cleaner" \
     && if [ "$WITH_OS_ARG_SUFFIX" == "true" ] ; then binary="$binary-$(go env GOOS)-$(go env GOARCH)" ; fi \
-    && mv "/app/bin/$binary" /app/bin/arc-cleaner
+    && mv "/app/bin/$binary" /app/bin/arc-cleaner \
+    && chmod 0755 /app/bin/*
 
 FROM scratch
 
-COPY --from=builder --chmod=0755 /app/bin/arc-cleaner /
+COPY --from=builder /app/bin/arc-cleaner /
 ENTRYPOINT [ "/arc-cleaner" ]
