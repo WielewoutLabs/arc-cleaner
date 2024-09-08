@@ -8,7 +8,6 @@ on:
 
 permissions:
   contents: read
-  packages: write
 
 env:
   devcontainer: ghcr.io/wielewout/arc-cleaner-dev:edge
@@ -43,6 +42,9 @@ jobs:
     needs:
       - vars
     if: ${{ needs.vars.outputs.has_devcontainer_changed == 'true' }}
+    permissions:
+      contents: read
+      packages: write
     runs-on: ubuntu-24.04
     steps:
       - name: Checkout
@@ -86,6 +88,9 @@ jobs:
     if: |
       !cancelled() &&
       !contains(needs.devcontainer.result, 'failure')
+    permissions:
+      contents: read
+      packages: write
     runs-on: ubuntu-24.04
     container:
       image: ${{ needs.vars.outputs.devcontainer }}
