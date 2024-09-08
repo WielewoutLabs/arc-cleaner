@@ -41,7 +41,7 @@ jobs:
     name: Devcontainer
     needs:
       - vars
-    if: ${{ needs.vars.outputs.has_devcontainer_changed == 'true' }}
+    if: needs.vars.outputs.has_devcontainer_changed == 'true'
     permissions:
       contents: read
       packages: write
@@ -192,17 +192,13 @@ jobs:
           config-file: .github/release-please.json
 
       - name: Download binaries
-        if: |
-          needs.vars.outputs.is_main_branch == 'true' &&
-          steps.release_please.outputs.releases_created == 'true'
+        if: steps.release_please.outputs.releases_created == 'true'
         uses: actions/download-artifact@v4.1.8
         with:
           pattern: binaries
           merge-multiple: true
       - name: Add version to binary names
-        if: |
-          needs.vars.outputs.is_main_branch == 'true' &&
-          steps.release_please.outputs.releases_created == 'true'
+        if: steps.release_please.outputs.releases_created == 'true'
         id: binaries
         run: |-
           release_binaries=()
@@ -214,9 +210,7 @@ jobs:
           done
           echo "binaries=${release_binaries[*]}" >> $GITHUB_OUTPUT
       - name: Release binaries
-        if: |
-          needs.vars.outputs.is_main_branch == 'true' &&
-          steps.release_please.outputs.releases_created == 'true'
+        if: steps.release_please.outputs.releases_created == 'true'
         uses: shogo82148/actions-upload-release-asset@v1.7.7
         with:
           upload_url: ${{ steps.release_please.outputs.upload_url }}
@@ -247,9 +241,7 @@ jobs:
           echo "container_images=${release_container_images[*]}" >> $GITHUB_OUTPUT
 
       - name: Add step summary
-        if: |
-          needs.vars.outputs.is_main_branch == 'true' &&
-          steps.release_please.outputs.releases_created == 'true'
+        if: steps.release_please.outputs.releases_created == 'true'
         run: |-
           binaries=""
           for binary in ${{ steps.binaries.outputs.binaries }} ; do
