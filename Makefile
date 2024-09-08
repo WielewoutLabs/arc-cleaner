@@ -21,6 +21,7 @@ LD_FLAGS = -ldflags " \
 	"
 
 DOCKER_SOCKET := /var/run/docker.sock
+DOCKER_CONFIG := ~/.docker
 
 LOCAL_DEVCONTAINER := false
 ifeq ($(LOCAL_DEVCONTAINER),true)
@@ -31,7 +32,7 @@ else
 endif
 DEVCONTAINER_NAME := arc-cleaner-dev
 DEVCONTAINER_WORKDIR := /go/src/github.com/wielewout/arc-cleaner/
-DEVCONTAINER_RUN := docker run -d --volume $(ROOT):$(DEVCONTAINER_WORKDIR) --volume $(DOCKER_SOCKET):/var/run/docker.sock --name $(DEVCONTAINER_NAME) $(DEVCONTAINER)
+DEVCONTAINER_RUN := docker run -d --volume $(ROOT):$(DEVCONTAINER_WORKDIR) --volume $(DOCKER_SOCKET):/var/run/docker.sock --volume $(DOCKER_CONFIG):/root/.docker --name $(DEVCONTAINER_NAME) $(DEVCONTAINER)
 
 DEVCONTAINER_EXEC := docker exec -it $(DEVCONTAINER_NAME)
 
