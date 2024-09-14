@@ -358,9 +358,13 @@ jobs:
         if: needs.vars.outputs.is_release == 'true'
         id: chart
         run: |-
+          rm -rf .cr-index
+          mkdir -p .cr-index
+
           cr index \
             --token ${{ secrets.GITHUB_TOKEN }} \
             --package-path .cr-release-packages \
+            --index-path .cr-index
             --owner ${{ github.repository_owner }} \
             --git-repo ${{ github.event.repository.name }} \
             --release-name-template "v{{ .Version }}" \
