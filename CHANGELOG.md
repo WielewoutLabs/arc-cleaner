@@ -1,5 +1,13 @@
 # Changelog
 
+## [0.1.2](https://github.com/Wielewout/arc-cleaner/compare/v0.1.1...v0.1.2) (2024-09-14)
+
+
+### Bug Fixes
+
+* fix container image tags in pipeline artifacts ([3bbc996](https://github.com/Wielewout/arc-cleaner/commit/3bbc996c05ce9d486981c29fa8be6cfb5e86d9d0))
+* strip v from release name in pipeline artifacts ([649bfe3](https://github.com/Wielewout/arc-cleaner/commit/649bfe3ac6cdf690fe180a9e854fd2d776451f78))
+
 ## [0.1.1](https://github.com/Wielewout/arc-cleaner/compare/v0.1.0...v0.1.1) (2024-09-14)
 
 
