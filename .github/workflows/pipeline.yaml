@@ -217,7 +217,7 @@ jobs:
       - build
     if: |
       !cancelled() &&
-      !contains(needs.build.result, 'failure') &&
+      contains(needs.build.result, 'success') &&
       needs.vars.outputs.is_main_branch == 'true'
     concurrency:
       group: ${{ format('{0}-{1}', github.workflow, github.ref_name) || github.run_id }}
@@ -252,9 +252,8 @@ jobs:
       - acceptance
     if: |
       !cancelled() &&
-      !contains(needs.build.result, 'failure') &&
-      !contains(needs.acceptance.result, 'failure') &&
-      !contains(needs.acceptance.result, 'skipped')
+      contains(needs.build.result, 'success') &&
+      contains(needs.acceptance.result, 'success')
     permissions:
       contents: write
       packages: write
