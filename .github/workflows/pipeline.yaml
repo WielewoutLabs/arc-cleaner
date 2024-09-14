@@ -45,11 +45,21 @@ jobs:
         run: |-
           echo "sha_tag=sha-${{ github.sha }}" >> $GITHUB_OUTPUT
 
-          release_name="${{ steps.release_please.outputs.releases_created == 'true' && steps.release_please.outputs.tag_name || '' }}"
-          echo "release_name=${release_name#"v"}" >> $GITHUB_OUTPUT
+          release_version="${{ steps.release_please.outputs.releases_created == 'true' && steps.release_please.outputs.tag_name || '' }}"
+          echo "release_version=${release_version#"v"}" >> $GITHUB_OUTPUT
+          release_version_major="$(echo "$release_version | cut -d . -f 1")"
+          echo "release_version_major=${release_version_major}" >> $GITHUB_OUTPUT
+          release_version_minor="$(echo "$release_version | cut -d . -f 2")"
+          echo "release_version_minor=${release_version_minor}" >> $GITHUB_OUTPUT
+          release_version_patch="$(echo "$release_version | cut -d . -f 3")"
+          echo "release_version_patch=${release_version_patch}" >> $GITHUB_OUTPUT
     outputs:
       is_release: ${{ steps.release_please.outputs.releases_created == 'true' }}
-      release_name: ${{ steps.vars.outputs.release_name }}
+      release_name: ${{ steps.release_please.outputs.tag_name }}
+      release_version: ${{ steps.vars.outputs.release_version }}
+      release_version_major: ${{ steps.vars.outputs.release_version_major }}
+      release_version_minor: ${{ steps.vars.outputs.release_version_minor }}
+      release_version_patch: ${{ steps.vars.outputs.release_version_patch }}
       release_upload_url: ${{ steps.release_please.outputs.upload_url }}
       release_html_url: ${{ steps.release_please.outputs.html_url }}
       is_main_branch: ${{ github.ref_type == 'branch' && github.ref_name == 'main' }}
@@ -132,7 +142,7 @@ jobs:
             make build \
             DEBUG=false \
             WITH_OS_ARCH_SUFFIX=true \
-            VERSION=${{ needs.vars.outputs.is_release == 'true' && needs.vars.outputs.release_name || github.ref_name }}
+            VERSION=${{ needs.vars.outputs.is_release == 'true' && needs.vars.outputs.release_version || github.ref_name }}
           done
       - name: Test
         run: make test-unit
@@ -170,9 +180,9 @@ jobs:
             suffix=-rc
           tags: |
             type=edge
-            type=semver,pattern={{version}}
-            type=semver,pattern={{major}}.{{minor}}
-            type=semver,pattern={{major}}
+            type=raw,enable=${{ needs.vars.outputs.is_release }},priority=901,value=${{ needs.vars.outputs.release_version }}
+            type=raw,enable=${{ needs.vars.outputs.is_release }},priority=900,value=${{ needs.vars.outputs.release_version_major }}.${{ needs.vars.outputs.release_version_minor }}
+            type=raw,enable=${{ needs.vars.outputs.is_release }},priority=900,value=${{ needs.vars.outputs.release_version_major }}
             type=ref,event=pr
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v3.2.0
@@ -262,9 +272,9 @@ jobs:
           release_binaries=()
           for binary in bin/* ; do
             suffix=${binary#"bin/arc-cleaner-"}
-            release_binary="bin/arc-cleaner-${{ needs.vars.outputs.release_name }}-$suffix"
+            release_binary="bin/arc-cleaner-${{ needs.vars.outputs.release_version }}-$suffix"
             mv $binary $release_binary
-            release_binaries+=("arc-cleaner-${{ needs.vars.outputs.release_name }}-$suffix")
+            release_binaries+=("arc-cleaner-${{ needs.vars.outputs.release_version }}-$suffix")
           done
           echo "binaries=${release_binaries[*]}" >> $GITHUB_OUTPUT
       - name: Release binaries
@@ -304,7 +314,7 @@ jobs:
       - name: Add version to chart
         if: needs.vars.outputs.is_release == 'true'
         run: |-
-          sed -i 's/0.0.0/${{ needs.vars.outputs.release_name }}/g' deploy/chart/Chart.yaml
+          sed -i 's/0.0.0/${{ needs.vars.outputs.release_version }}/g' deploy/chart/Chart.yaml
       - name: Package chart
         if: needs.vars.outputs.is_release == 'true'
         run: |-
@@ -315,7 +325,7 @@ jobs:
         uses: shogo82148/actions-upload-release-asset@v1.7.7
         with:
           upload_url: ${{ needs.vars.outputs.release_upload_url }}
-          asset_path: arc-cleaner-${{ needs.vars.outputs.release_name }}.tgz
+          asset_path: arc-cleaner-${{ needs.vars.outputs.release_version }}.tgz
       - name: Release chart
         if: needs.vars.outputs.is_release == 'true'
         id: chart
