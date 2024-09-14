@@ -349,7 +349,7 @@ jobs:
         id: chart
         run: |-
           cr index \
-            --token ${{ secrets.GITHUB_TOKEN }}
+            --token ${{ secrets.GITHUB_TOKEN }} \
             --package-path .cr-release-packages \
             --owner ${{ github.repository_owner }} \
             --git-repo ${{ github.repository }} \
