@@ -46,13 +46,14 @@ jobs:
           echo "sha_tag=sha-${{ github.sha }}" >> $GITHUB_OUTPUT
 
           release_version="${{ steps.release_please.outputs.releases_created == 'true' && steps.release_please.outputs.tag_name || '' }}"
-          echo "release_version=${release_version#"v"}" >> $GITHUB_OUTPUT
+          release_version="${release_version#"v"}"
+          echo "release_version=$release_version" >> $GITHUB_OUTPUT
           release_version_major="$(echo "$release_version" | cut -d . -f 1)"
-          echo "release_version_major=${release_version_major}" >> $GITHUB_OUTPUT
+          echo "release_version_major=$release_version_major" >> $GITHUB_OUTPUT
           release_version_minor="$(echo "$release_version" | cut -d . -f 2)"
-          echo "release_version_minor=${release_version_minor}" >> $GITHUB_OUTPUT
+          echo "release_version_minor=$release_version_minor" >> $GITHUB_OUTPUT
           release_version_patch="$(echo "$release_version" | cut -d . -f 3)"
-          echo "release_version_patch=${release_version_patch}" >> $GITHUB_OUTPUT
+          echo "release_version_patch=$release_version_patch" >> $GITHUB_OUTPUT
     outputs:
       is_release: ${{ steps.release_please.outputs.releases_created == 'true' }}
       release_name: ${{ steps.release_please.outputs.tag_name }}
