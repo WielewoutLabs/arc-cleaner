@@ -333,8 +333,10 @@ jobs:
         with:
           fetch-depth: 0
       - name: Make workdir safe
+        if: needs.vars.outputs.is_release == 'true'
         run: git config --global --add safe.directory ${{ env.workdir }}
       - name: Setup git user
+        if: needs.vars.outputs.is_release == 'true'
         run: |-
           git config user.name github-actions[bot]
           git config user.email 41898282+github-actions[bot]@users.noreply.github.com
