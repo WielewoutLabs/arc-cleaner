@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.1.3](https://github.com/Wielewout/arc-cleaner/compare/v0.1.2...v0.1.3) (2024-09-14)
+
+
+### Bug Fixes
+
+* run release in devcontainer ([02ca7f2](https://github.com/Wielewout/arc-cleaner/commit/02ca7f26cb3c5eebc9cb47b90c58eceabbe87a4a))
+
 ## [0.1.2](https://github.com/Wielewout/arc-cleaner/compare/v0.1.1...v0.1.2) (2024-09-14)
 
 
