@@ -121,7 +121,8 @@ func pullImageFromRegistry(ctx context.Context, c *Config, containerImageName st
 	provider, err := testcontainers.NewDockerProvider()
 	require.NoError(c.testingT, err)
 
-	provider.PullImage(ctx, containerImageName)
+	err = provider.PullImage(ctx, containerImageName)
+	require.NoError(c.testingT, err)
 }
 
 func loadImageInKubernetesCluster(ctx context.Context, c *Config, containerImageName string) {
