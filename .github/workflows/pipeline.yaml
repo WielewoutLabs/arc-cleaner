@@ -276,14 +276,19 @@ jobs:
         if: needs.vars.outputs.is_release == 'true'
         id: binaries
         run: |-
-          release_binaries=()
+          release_binaries=""
           for binary in bin/* ; do
             suffix=${binary#"bin/arc-cleaner-"}
-            release_binary="bin/arc-cleaner-${{ needs.vars.outputs.release_version }}-$suffix"
-            mv $binary $release_binary
-            release_binaries+=("arc-cleaner-${{ needs.vars.outputs.release_version }}-$suffix")
+            release_binary_name="arc-cleaner-${{ needs.vars.outputs.release_version }}-$suffix"
+            release_binary="bin/$release_binary_name"
+            mv "$binary" "$release_binary"
+            if [ -z "$release_binaries" ] ; then
+              release_binaries="$release_binary_name"
+            else
+              release_binaries="$release_binaries $release_binary_name"
+            fi
           done
-          echo "binaries=${release_binaries[*]}" >> $GITHUB_OUTPUT
+          echo "binaries=$release_binaries" >> $GITHUB_OUTPUT
       - name: Release binaries
         if: needs.vars.outputs.is_release == 'true'
         uses: shogo82148/actions-upload-release-asset@v1.7.7
@@ -305,15 +310,20 @@ jobs:
       - name: Release container images
         id: container_images
         run: |-
-          release_container_images=()
+          release_container_images=""
           rc_images="${{ needs.build.outputs.images }}"
-          while IFS= read -r rc_image ; do
+          rc_images=$(echo "$rc_images" | tr '\n' ' ')
+          for rc_image in $rc_images ; do
             release_image=${rc_image%"-rc"}
             echo "Retagging $rc_image to $release_image"
             docker buildx imagetools create --tag $release_image $rc_image
-            release_container_images+=($release_image)
-          done <<< "$rc_images"
-          echo "container_images=${release_container_images[*]}" >> $GITHUB_OUTPUT
+            if [ -z "$release_container_images" ] ; then
+              release_container_images="$release_image"
+            else
+              release_container_images="$release_container_images $release_image"
+            fi
+          done
+          echo "container_images=$release_container_images" >> $GITHUB_OUTPUT
 
       - name: Checkout
         if: needs.vars.outputs.is_release == 'true'
