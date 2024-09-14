@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.1.1](https://github.com/Wielewout/arc-cleaner/compare/v0.1.0...v0.1.1) (2024-09-14)
+
+
+### Bug Fixes
+
+* fix release binary download in pipeline ([5c038ff](https://github.com/Wielewout/arc-cleaner/commit/5c038ffd8ce90993d2f5d76972beab3699b05bbb))
+
 ## 0.1.0 (2024-09-14)
 
 
