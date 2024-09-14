@@ -12,13 +12,17 @@ endif
 
 PKG := ./...
 
-LD_FLAGS = -ldflags " \
-	-s \
-	-w \
-	-extldflags \"-static\" \
+DEBUG := true
+
+LD_FLAGS =  -extldflags \"-static\" \
 	-X \"github.com/wielewout/arc-cleaner/cmd.version=$(VERSION)\" \
-	-X \"github.com/wielewout/arc-cleaner/cmd.commit=$(COMMIT)\" \
-	"
+	-X \"github.com/wielewout/arc-cleaner/cmd.commit=$(COMMIT)\"
+
+ifeq ($(DEBUG),true)
+    BUILD_ARGS = -ldflags "$(LD_FLAGS)"
+else
+	BUILD_ARGS = -ldflags "-s -w $(LD_FLAGS)"
+endif
 
 DOCKER_SOCKET := /var/run/docker.sock
 DOCKER_CONFIG := ~/.docker
@@ -76,7 +80,10 @@ endif
 .PHONY: build
 build: ## Build application
 	@mkdir -p $(ROOT)/bin
-	@go build $(LD_FLAGS) -o $(ROOT)/bin/$(BINARY_NAME) main.go
+	@go build $(BUILD_ARGS) -o $(ROOT)/bin/$(BINARY_NAME) main.go
+ifneq ($(DEBUG),true)
+		@upx --best --lzma $(ROOT)/bin/$(BINARY_NAME)
+endif
 
 .PHONY: run
 run: build ## Run application

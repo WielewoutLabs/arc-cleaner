@@ -109,7 +109,12 @@ jobs:
       - name: Build
         run: |-
           for arch in amd64 arm64 ; do
-            GOOS=linux GOARCH=$arch make build WITH_OS_ARCH_SUFFIX=true ${{ github.ref_type == 'tag' && format('VERSION={0}', github.ref_name) || '' }}
+            GOOS=linux \
+            GOARCH=$arch \
+            make build \
+            DEBUG=false \
+            WITH_OS_ARCH_SUFFIX=true \
+            VERSION=${{ github.ref_name }}
           done
       - name: Test
         run: make test-unit
