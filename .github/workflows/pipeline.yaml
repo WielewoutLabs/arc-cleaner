@@ -34,7 +34,6 @@ jobs:
           echo "sha_tag=sha-${{ github.sha }}" >> $GITHUB_OUTPUT
     outputs:
       is_main_branch: ${{ github.ref_type == 'branch' && github.ref_name == 'main' }}
-      is_pull_request: ${{ github.event_name == 'pull_request' }}
       has_devcontainer_changed: ${{ github.event_name != 'workflow_dispatch' && steps.paths_filter.outputs.devcontainer }}
       devcontainer: ${{ (github.event_name != 'workflow_dispatch' && steps.paths_filter.outputs.devcontainer == 'true' && format('ghcr.io/wielewout/arc-cleaner-dev:{0}', steps.vars.outputs.sha_tag)) || env.devcontainer }}
       sha_tag: ${{ steps.vars.outputs.sha_tag }}
@@ -188,10 +187,11 @@ jobs:
       - build
     if: |
       !cancelled() &&
-      !contains(needs.build.result, 'failure')
+      !contains(needs.build.result, 'failure') &&
+      needs.vars.outputs.is_main_branch == 'true'
     concurrency:
       group: ${{ format('{0}-{1}', github.workflow, github.ref_name) || github.run_id }}
-      cancel-in-progress: ${{ needs.vars.outputs.is_pull_request == 'true' }}
+      cancel-in-progress: false
     permissions:
       contents: read
       packages: read
@@ -222,6 +222,7 @@ jobs:
       - acceptance
     if: |
       !cancelled() &&
+      !contains(needs.build.result, 'failure') &&
       !contains(needs.acceptance.result, 'failure')
     permissions:
       contents: write
