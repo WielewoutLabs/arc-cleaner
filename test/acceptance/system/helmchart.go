@@ -56,6 +56,8 @@ func build(ctx context.Context, c *Config) string {
 			binaryName = buildBinary(ctx, c)
 		}
 		containerImageName = buildImageFromContainerfile(ctx, c, binaryName)
+	} else {
+		pullImageFromRegistry(ctx, c, containerImageName)
 	}
 
 	loadImageInKubernetesCluster(ctx, c, containerImageName)
@@ -113,6 +115,13 @@ func buildImageFromContainerfile(ctx context.Context, c *Config, binaryName stri
 	})
 
 	return containerImageName
+}
+
+func pullImageFromRegistry(ctx context.Context, c *Config, containerImageName string) {
+	provider, err := testcontainers.NewDockerProvider()
+	require.NoError(c.testingT, err)
+
+	provider.PullImage(ctx, containerImageName)
 }
 
 func loadImageInKubernetesCluster(ctx context.Context, c *Config, containerImageName string) {
