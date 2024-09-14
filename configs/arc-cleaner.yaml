@@ -2,6 +2,8 @@
 log:
   level: debug
 
+listenAddress: :8080
+
 namespace: arc-runners
 period: 5s
 dryrun: true

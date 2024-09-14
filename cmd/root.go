@@ -45,6 +45,9 @@ the runner can become available again.`,
 		}
 
 		appOptions := []app.Option{}
+		if viper.IsSet("listenAddress") {
+			appOptions = append(appOptions, app.WithListenAddress(viper.GetString("listenAddress")))
+		}
 		if viper.IsSet("namespace") {
 			appOptions = append(appOptions, app.WithNamespace(viper.GetString("namespace")))
 		}

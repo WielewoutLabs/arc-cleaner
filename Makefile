@@ -86,6 +86,14 @@ run: build ## Run application
 test: ## Run all tests
 	@go test -v $(PKG)
 
+.PHONY: test-unit
+test-unit: ## Run all unit tests
+	@go test -v -short $(PKG)
+
+.PHONY: test-acceptance
+test-acceptance: ## Run all acceptance tests
+	@go test -v ./test/acceptance/...
+
 .PHONY: test-coverage
 test-coverage: ## Run tests with coverage
 	@go test -covermode=count -coverprofile=profile.cov $(PKG) || true
