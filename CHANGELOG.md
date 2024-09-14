@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.1.6](https://github.com/Wielewout/arc-cleaner/compare/v0.1.5...v0.1.6) (2024-09-14)
+
+
+### Bug Fixes
+
+* make workdir safe after checkout in release step of pipeline ([5f9acb6](https://github.com/Wielewout/arc-cleaner/commit/5f9acb679c1d19340d8ad45174db7cfabc63d1ef))
+
 ## [0.1.5](https://github.com/Wielewout/arc-cleaner/compare/v0.1.4...v0.1.5) (2024-09-14)
 
 
