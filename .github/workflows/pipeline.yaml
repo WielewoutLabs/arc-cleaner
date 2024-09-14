@@ -337,7 +337,9 @@ jobs:
       - name: Make workdir safe
         run: git config --global --add safe.directory ${{ env.workdir }}
       - name: Setup git user
-        uses: git-actions/set-user@v1.0.0
+        run: |-
+          git config user.name github-actions[bot]
+          git config user.email 41898282+github-actions[bot]@users.noreply.github.com
       - name: Add version to chart
         if: needs.vars.outputs.is_release == 'true'
         run: |-
