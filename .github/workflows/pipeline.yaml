@@ -253,7 +253,8 @@ jobs:
     if: |
       !cancelled() &&
       !contains(needs.build.result, 'failure') &&
-      !contains(needs.acceptance.result, 'failure')
+      !contains(needs.acceptance.result, 'failure') &&
+      !contains(needs.acceptance.result, 'skipped')
     permissions:
       contents: write
       packages: write
