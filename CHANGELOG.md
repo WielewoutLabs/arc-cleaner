@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.1.8](https://github.com/Wielewout/arc-cleaner/compare/v0.1.7...v0.1.8) (2024-09-14)
+
+
+### Bug Fixes
+
+* setup git user without bash for chart release ([a18619e](https://github.com/Wielewout/arc-cleaner/commit/a18619ec8c8d202d8c3840dbb3f3f07b45c992bc))
+
 ## [0.1.7](https://github.com/Wielewout/arc-cleaner/compare/v0.1.6...v0.1.7) (2024-09-14)
 
 
