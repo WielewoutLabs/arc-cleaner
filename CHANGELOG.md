@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.1.11](https://github.com/Wielewout/arc-cleaner/compare/v0.1.10...v0.1.11) (2024-09-14)
+
+
+### Bug Fixes
+
+* fix chart release name template ([bd9594e](https://github.com/Wielewout/arc-cleaner/commit/bd9594e98d8ba0eb8a6a19cca88bcd581497a490))
+
 ## [0.1.10](https://github.com/Wielewout/arc-cleaner/compare/v0.1.9...v0.1.10) (2024-09-14)
 
 
