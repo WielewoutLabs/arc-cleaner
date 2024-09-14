@@ -333,6 +333,8 @@ jobs:
           fetch-depth: 0
       - name: Make workdir safe
         run: git config --global --add safe.directory ${{ env.workdir }}
+      - name: Setup git user
+        uses: git-actions/set-user@v1.0.0
       - name: Add version to chart
         if: needs.vars.outputs.is_release == 'true'
         run: |-
