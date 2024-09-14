@@ -364,7 +364,7 @@ jobs:
           cr index \
             --token ${{ secrets.GITHUB_TOKEN }} \
             --package-path .cr-release-packages \
-            --index-path .cr-index
+            --index-path .cr-index \
             --owner ${{ github.repository_owner }} \
             --git-repo ${{ github.event.repository.name }} \
             --release-name-template "v{{ .Version }}" \
