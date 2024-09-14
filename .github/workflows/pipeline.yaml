@@ -18,6 +18,15 @@ jobs:
     name: Vars
     runs-on: ubuntu-24.04
     steps:
+      - name: Release please
+        if: github.ref_type == 'branch' && github.ref_name == 'main'
+        id: release_please
+        uses: googleapis/release-please-action@v4.1.3
+        with:
+          release-type: go
+          target-branch: ${{ github.ref_name }}
+          config-file: .github/release-please.json
+
       - name: Checkout
         uses: actions/checkout@v4.1.7
       - name: Filter paths
@@ -33,6 +42,10 @@ jobs:
         run: |-
           echo "sha_tag=sha-${{ github.sha }}" >> $GITHUB_OUTPUT
     outputs:
+      is_release: ${{ steps.release_please.outputs.releases_created == 'true' }}
+      release_name: ${{ steps.release_please.outputs.tag_name }}
+      release_upload_url: ${{ steps.release_please.outputs.upload_url }}
+      release_html_url: ${{ steps.release_please.outputs.html_url }}
       is_main_branch: ${{ github.ref_type == 'branch' && github.ref_name == 'main' }}
       has_devcontainer_changed: ${{ github.event_name != 'workflow_dispatch' && steps.paths_filter.outputs.devcontainer }}
       devcontainer: ${{ (github.event_name != 'workflow_dispatch' && steps.paths_filter.outputs.devcontainer == 'true' && format('ghcr.io/wielewout/arc-cleaner-dev:{0}', steps.vars.outputs.sha_tag)) || env.devcontainer }}
@@ -113,7 +126,7 @@ jobs:
             make build \
             DEBUG=false \
             WITH_OS_ARCH_SUFFIX=true \
-            VERSION=${{ github.ref_name }}
+            VERSION=${{ needs.vars.outputs.is_release == 'true' && needs.vars.outputs.release_name || github.ref_name }}
           done
       - name: Test
         run: make test-unit
@@ -230,38 +243,29 @@ jobs:
       packages: write
     runs-on: ubuntu-24.04
     steps:
-      - name: Release please
-        if: needs.vars.outputs.is_main_branch == 'true'
-        id: release_please
-        uses: googleapis/release-please-action@v4.1.3
-        with:
-          release-type: go
-          target-branch: ${{ github.ref_name }}
-          config-file: .github/release-please.json
-
       - name: Download binaries
-        if: steps.release_please.outputs.releases_created == 'true'
+        if: needs.vars.outputs.is_release == 'true'
         uses: actions/download-artifact@v4.1.8
         with:
           pattern: binaries
           merge-multiple: true
       - name: Add version to binary names
-        if: steps.release_please.outputs.releases_created == 'true'
+        if: needs.vars.outputs.is_release == 'true'
         id: binaries
         run: |-
           release_binaries=()
           for binary in bin/* ; do
             suffix=${binary#"bin/arc-cleaner-"}
-            release_binary="bin/arc-cleaner-${{ steps.release_please.outputs.tag_name }}-$suffix"
+            release_binary="bin/arc-cleaner-${{ needs.vars.outputs.release_name }}-$suffix"
             mv $binary $release_binary
-            release_binaries+=("arc-cleaner-${{ steps.release_please.outputs.tag_name }}-$suffix")
+            release_binaries+=("arc-cleaner-${{ needs.vars.outputs.release_name }}-$suffix")
           done
           echo "binaries=${release_binaries[*]}" >> $GITHUB_OUTPUT
       - name: Release binaries
-        if: steps.release_please.outputs.releases_created == 'true'
+        if: needs.vars.outputs.is_release == 'true'
         uses: shogo82148/actions-upload-release-asset@v1.7.7
         with:
-          upload_url: ${{ steps.release_please.outputs.upload_url }}
+          upload_url: ${{ needs.vars.outputs.release_upload_url }}
           asset_path: bin/arc-cleaner-*
 
       - name: Login to GitHub Container Registry
@@ -289,25 +293,25 @@ jobs:
           echo "container_images=${release_container_images[*]}" >> $GITHUB_OUTPUT
 
       - name: Checkout
-        if: steps.release_please.outputs.releases_created == 'true'
+        if: needs.vars.outputs.is_release == 'true'
         uses: actions/checkout@v4.1.7
       - name: Add version to chart
-        if: steps.release_please.outputs.releases_created == 'true'
+        if: needs.vars.outputs.is_release == 'true'
         run: |-
-          sed -i 's/0.0.0/${{ steps.release_please.outputs.tag_name }}/g' deploy/chart/Chart.yaml
+          sed -i 's/0.0.0/${{ needs.vars.outputs.release_name }}/g' deploy/chart/Chart.yaml
       - name: Package chart
-        if: steps.release_please.outputs.releases_created == 'true'
+        if: needs.vars.outputs.is_release == 'true'
         run: |-
           cr package deploy/chart \
             --package-path .cr-release-packages
       - name: Upload chart
-        if: steps.release_please.outputs.releases_created == 'true'
+        if: needs.vars.outputs.is_release == 'true'
         uses: shogo82148/actions-upload-release-asset@v1.7.7
         with:
-          upload_url: ${{ steps.release_please.outputs.upload_url }}
-          asset_path: arc-cleaner-${{ steps.release_please.outputs.tag_name }}.tgz
+          upload_url: ${{ needs.vars.outputs.release_upload_url }}
+          asset_path: arc-cleaner-${{ needs.vars.outputs.release_name }}.tgz
       - name: Release chart
-        if: steps.release_please.outputs.releases_created == 'true'
+        if: needs.vars.outputs.is_release == 'true'
         id: chart
         run: |-
           cr index \
@@ -321,7 +325,7 @@ jobs:
           echo "chart=$chart" >> $GITHUB_OUTPUT
 
       - name: Add step summary
-        if: steps.release_please.outputs.releases_created == 'true'
+        if: needs.vars.outputs.is_release == 'true'
         run: |-
           binaries=""
           for binary in ${{ steps.binaries.outputs.binaries }} ; do
@@ -336,7 +340,7 @@ jobs:
           chart="* `${{ steps.chart.outputs.chart }}`\n"
 
           cat << EOF >> $GITHUB_STEP_SUMMARY
-          # Release ${{ steps.release_please.outputs.tag_name }}
+          # Release ${{ needs.vars.outputs.release_name }}
 
           ## Binaries
           $binaries
@@ -351,5 +355,5 @@ jobs:
 
           ---
 
-          More info: [${{ steps.release_please.outputs.html_url }}](${{ steps.release_please.outputs.html_url }})
+          More info: [${{ needs.vars.outputs.release_html_url }}](${{ needs.vars.outputs.release_html_url }})
           EOF
