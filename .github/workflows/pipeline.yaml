@@ -360,7 +360,7 @@ jobs:
             --token ${{ secrets.GITHUB_TOKEN }} \
             --package-path .cr-release-packages \
             --owner ${{ github.repository_owner }} \
-            --git-repo ${{ github.repository }} \
+            --git-repo ${{ github.event.repository.name }} \
             --release-name-template "{{ .Version }}" \
             --push
           chart=$(cd .cr-release-packages && ls *.tgz)
