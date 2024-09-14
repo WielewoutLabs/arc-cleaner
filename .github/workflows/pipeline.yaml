@@ -363,7 +363,7 @@ jobs:
             --package-path .cr-release-packages \
             --owner ${{ github.repository_owner }} \
             --git-repo ${{ github.event.repository.name }} \
-            --release-name-template "{{ .Version }}" \
+            --release-name-template "v{{ .Version }}" \
             --push
           chart=$(cd .cr-release-packages && ls *.tgz)
           echo "chart=$chart" >> $GITHUB_OUTPUT
