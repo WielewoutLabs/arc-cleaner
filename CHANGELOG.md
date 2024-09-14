@@ -1,5 +1,13 @@
 # Changelog
 
+## [0.1.5](https://github.com/Wielewout/arc-cleaner/compare/v0.1.4...v0.1.5) (2024-09-14)
+
+
+### Bug Fixes
+
+* fix chart asset path ([8f51e60](https://github.com/Wielewout/arc-cleaner/commit/8f51e60cfc839b25560c77602527c38797616182))
+* fix missing line escape for chart release ([8df45e8](https://github.com/Wielewout/arc-cleaner/commit/8df45e88b4ae69caea760430db649e7d3bde4b93))
+
 ## [0.1.4](https://github.com/Wielewout/arc-cleaner/compare/v0.1.3...v0.1.4) (2024-09-14)
 
 
