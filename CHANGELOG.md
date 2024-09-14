@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.1.10](https://github.com/Wielewout/arc-cleaner/compare/v0.1.9...v0.1.10) (2024-09-14)
+
+
+### Bug Fixes
+
+* skip chart release steps if not releasing ([1dbb995](https://github.com/Wielewout/arc-cleaner/commit/1dbb995e2c2d5067b619edf7e4d4b663cd91d945))
+
 ## [0.1.9](https://github.com/Wielewout/arc-cleaner/compare/v0.1.8...v0.1.9) (2024-09-14)
 
 
