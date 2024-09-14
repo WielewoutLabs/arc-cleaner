@@ -329,6 +329,8 @@ jobs:
       - name: Checkout
         if: needs.vars.outputs.is_release == 'true'
         uses: actions/checkout@v4.1.7
+      - name: Make workdir safe
+        run: git config --global --add safe.directory ${{ env.workdir }}
       - name: Add version to chart
         if: needs.vars.outputs.is_release == 'true'
         run: |-
