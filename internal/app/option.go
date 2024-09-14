@@ -6,6 +6,20 @@ type Option interface {
 	apply(*App)
 }
 
+type optionWithListenAddress struct {
+	listenAddress string
+}
+
+func (o optionWithListenAddress) apply(a *App) {
+	a.listenAddress = o.listenAddress
+}
+
+func WithListenAddress(listenAddress string) optionWithListenAddress {
+	return optionWithListenAddress{
+		listenAddress: listenAddress,
+	}
+}
+
 type optionWithNamespace struct {
 	namespace string
 }

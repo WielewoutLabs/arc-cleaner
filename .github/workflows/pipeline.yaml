@@ -11,6 +11,7 @@ permissions:
 
 env:
   devcontainer: ghcr.io/wielewout/arc-cleaner-dev:edge
+  workdir: /__w/arc-cleaner/arc-cleaner
 
 jobs:
   vars:
@@ -33,6 +34,7 @@ jobs:
           echo "sha_tag=sha-${{ github.sha }}" >> $GITHUB_OUTPUT
     outputs:
       is_main_branch: ${{ github.ref_type == 'branch' && github.ref_name == 'main' }}
+      is_pull_request: ${{ github.event_name == 'pull_request' }}
       has_devcontainer_changed: ${{ github.event_name != 'workflow_dispatch' && steps.paths_filter.outputs.devcontainer }}
       devcontainer: ${{ (github.event_name != 'workflow_dispatch' && steps.paths_filter.outputs.devcontainer == 'true' && format('ghcr.io/wielewout/arc-cleaner-dev:{0}', steps.vars.outputs.sha_tag)) || env.devcontainer }}
       sha_tag: ${{ steps.vars.outputs.sha_tag }}
@@ -103,14 +105,14 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4.1.7
       - name: Make workdir safe
-        run: git config --global --add safe.directory /__w/arc-cleaner/arc-cleaner
+        run: git config --global --add safe.directory ${{ env.workdir }}
       - name: Build
         run: |-
           for arch in amd64 arm64 ; do
             GOOS=linux GOARCH=$arch make build WITH_OS_ARCH_SUFFIX=true ${{ github.ref_type == 'tag' && format('VERSION={0}', github.ref_name) || '' }}
           done
       - name: Test
-        run: make test
+        run: make test-unit
       - name: Lint
         run: make lint
       - name: Upload binary
@@ -165,17 +167,57 @@ jobs:
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
           annotations: ${{ steps.meta.outputs.annotations }}
+      - name: First image
+        id: first
+        run: |
+          image=$(echo "${{ steps.meta.outputs.tags }}" | head -n 1)
+          echo "image=$image" >> $GITHUB_OUTPUT
     outputs:
       images: ${{ steps.meta.outputs.tags }}
+      image: ${{ steps.first.outputs.image }}
 
-  release:
-    name: Release
+  acceptance:
+    name: Acceptance
     needs:
       - vars
       - build
     if: |
       !cancelled() &&
       !contains(needs.build.result, 'failure')
+    concurrency:
+      group: ${{ format('{0}-{1}', github.workflow, github.ref_name) || github.run_id }}
+      cancel-in-progress: ${{ needs.vars.outputs.is_pull_request == 'true' }}
+    permissions:
+      contents: read
+      packages: read
+    runs-on: ubuntu-24.04
+    container:
+      image: ${{ needs.vars.outputs.devcontainer }}
+      credentials:
+        username: ${{ github.repository_owner }}
+        password: ${{ secrets.GITHUB_TOKEN }}
+      volumes:
+        - /var/run/docker.sock:/var/run/docker.sock
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4.1.7
+      - name: Make workdir safe
+        run: git config --global --add safe.directory ${{ env.workdir }}
+      - name: Test
+        run: >-
+          USE_PREBUILT_CONTAINER_IMAGE=true
+          CONTAINER_IMAGE=${{ needs.build.outputs.image }}
+          make test-acceptance
+
+  release:
+    name: Release
+    needs:
+      - vars
+      - build
+      - acceptance
+    if: |
+      !cancelled() &&
+      !contains(needs.acceptance.result, 'failure')
     permissions:
       contents: write
       pull-requests: write

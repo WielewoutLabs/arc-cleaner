@@ -1,0 +1,13 @@
+################################################################################
+
+Deployed ARC cleaner with the following details:
+
+  Release name: {{ $.Release.Name }}
+  Namespace: {{ $.Release.Namespace }}
+
+  Version: {{ $.Chart.Version }}
+  App version: {{ $.Chart.AppVersion }}
+
+  Revision: {{ $.Release.Revision }}
+
+################################################################################

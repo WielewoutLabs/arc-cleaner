@@ -2,6 +2,8 @@ package app
 
 import (
 	"context"
+	"log/slog"
+	"net/http"
 	"time"
 
 	corev1 "k8s.io/api/core/v1"
@@ -14,18 +16,20 @@ import (
 )
 
 type App struct {
-	k8sClient *kubernetes.Client
-	namespace string
-	period    time.Duration
-	dryRun    bool
+	listenAddress string
+	k8sClient     *kubernetes.Client
+	namespace     string
+	period        time.Duration
+	dryRun        bool
 }
 
 func New(k8sClient *kubernetes.Client, opts ...Option) *App {
 	app := &App{
-		k8sClient: k8sClient,
-		namespace: "default",
-		period:    30 * time.Second,
-		dryRun:    false,
+		listenAddress: ":8080",
+		k8sClient:     k8sClient,
+		namespace:     "default",
+		period:        30 * time.Second,
+		dryRun:        false,
 	}
 
 	for _, opt := range opts {
@@ -38,8 +42,13 @@ func New(k8sClient *kubernetes.Client, opts ...Option) *App {
 func (app App) Start(ctx context.Context) {
 	logger := logging.FromContext(ctx)
 
+	ready := false
+	go startHttpServer(ctx, app.listenAddress, &ready)
+
 	ticker := time.NewTicker(app.period)
 	logger.Debug("started periodic timer", "period", app.period)
+
+	ready = true
 
 	app.reconcile(ctx)
 
@@ -53,6 +62,28 @@ func (app App) Start(ctx context.Context) {
 			logger.Debug("stopped periodic timer")
 			return
 		}
+	}
+}
+
+func startHttpServer(ctx context.Context, listenAddress string, ready *bool) {
+	logger := logging.FromContext(ctx)
+
+	mux := http.NewServeMux()
+	mux.HandleFunc("GET /livez", func(w http.ResponseWriter, r *http.Request) {
+		w.WriteHeader(http.StatusOK)
+	})
+	mux.HandleFunc("GET /readyz", func(w http.ResponseWriter, r *http.Request) {
+		if *ready {
+			w.WriteHeader(http.StatusOK)
+		} else {
+			w.WriteHeader(http.StatusInternalServerError)
+		}
+	})
+
+	logger.Info("serving", "listenAddress", listenAddress)
+	err := http.ListenAndServe(listenAddress, mux)
+	if err != nil {
+		slog.Error("failed listening and serving http", "error", err)
 	}
 }
 
