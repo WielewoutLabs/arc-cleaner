@@ -254,9 +254,6 @@ jobs:
       !cancelled() &&
       !contains(needs.build.result, 'failure') &&
       !contains(needs.acceptance.result, 'failure')
-    concurrency:
-      group: ${{ format('{0}-{1}', github.workflow, github.ref_name) || github.run_id }}
-      cancel-in-progress: false
     permissions:
       contents: write
       packages: write
