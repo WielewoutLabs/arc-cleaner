@@ -1,5 +1,13 @@
 # Changelog
 
+## [0.1.7](https://github.com/Wielewout/arc-cleaner/compare/v0.1.6...v0.1.7) (2024-09-14)
+
+
+### Bug Fixes
+
+* checkout full repo for chart release ([b7de741](https://github.com/Wielewout/arc-cleaner/commit/b7de741a213e18bdeb716888561b0d109d15a738))
+* setup git user for chart release ([2bf81eb](https://github.com/Wielewout/arc-cleaner/commit/2bf81eb5b5a584f54b700915edb547193f561bb6))
+
 ## [0.1.6](https://github.com/Wielewout/arc-cleaner/compare/v0.1.5...v0.1.6) (2024-09-14)
 
 
