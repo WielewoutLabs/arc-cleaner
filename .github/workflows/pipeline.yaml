@@ -257,6 +257,13 @@ jobs:
       contents: write
       packages: write
     runs-on: ubuntu-24.04
+    container:
+      image: ${{ needs.vars.outputs.devcontainer }}
+      credentials:
+        username: ${{ github.repository_owner }}
+        password: ${{ secrets.GITHUB_TOKEN }}
+      volumes:
+        - /var/run/docker.sock:/var/run/docker.sock
     steps:
       - name: Download binaries
         if: needs.vars.outputs.is_release == 'true'
