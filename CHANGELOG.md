@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.1.4](https://github.com/Wielewout/arc-cleaner/compare/v0.1.3...v0.1.4) (2024-09-14)
+
+
+### Bug Fixes
+
+* fix major release version containing a v prefix ([309cf9e](https://github.com/Wielewout/arc-cleaner/commit/309cf9ec9ed012df5f6a774ba5f2f2f6a67ee938))
+
 ## [0.1.3](https://github.com/Wielewout/arc-cleaner/compare/v0.1.2...v0.1.3) (2024-09-14)
 
 
