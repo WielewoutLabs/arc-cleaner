@@ -44,9 +44,12 @@ jobs:
         id: vars
         run: |-
           echo "sha_tag=sha-${{ github.sha }}" >> $GITHUB_OUTPUT
+
+          release_name="${{ steps.release_please.outputs.releases_created == 'true' && steps.release_please.outputs.tag_name || '' }}"
+          echo "release_name=${release_name#"v"}" >> $GITHUB_OUTPUT
     outputs:
       is_release: ${{ steps.release_please.outputs.releases_created == 'true' }}
-      release_name: ${{ steps.release_please.outputs.tag_name }}
+      release_name: ${{ steps.vars.outputs.release_name }}
       release_upload_url: ${{ steps.release_please.outputs.upload_url }}
       release_html_url: ${{ steps.release_please.outputs.html_url }}
       is_main_branch: ${{ github.ref_type == 'branch' && github.ref_name == 'main' }}
