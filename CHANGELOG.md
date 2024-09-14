@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.1.12](https://github.com/Wielewout/arc-cleaner/compare/v0.1.11...v0.1.12) (2024-09-14)
+
+
+### Bug Fixes
+
+* ensure .cr-index directory exists ([1858c65](https://github.com/Wielewout/arc-cleaner/commit/1858c65d19dba0cd91b285190d49341e1c3c16c9))
+
 ## [0.1.11](https://github.com/Wielewout/arc-cleaner/compare/v0.1.10...v0.1.11) (2024-09-14)
 
 
