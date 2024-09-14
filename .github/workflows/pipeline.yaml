@@ -17,6 +17,9 @@ jobs:
   vars:
     name: Vars
     runs-on: ubuntu-24.04
+    permissions:
+      contents: write
+      pull-requests: write
     steps:
       - name: Release please
         if: github.ref_type == 'branch' && github.ref_name == 'main'
@@ -238,8 +241,7 @@ jobs:
       !contains(needs.build.result, 'failure') &&
       !contains(needs.acceptance.result, 'failure')
     permissions:
-      contents: write
-      pull-requests: write
+      contents: read
       packages: write
     runs-on: ubuntu-24.04
     steps:
