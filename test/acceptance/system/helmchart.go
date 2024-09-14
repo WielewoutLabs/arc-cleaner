@@ -78,6 +78,13 @@ func buildBinary(ctx context.Context, c *Config) string {
 	err := build.Run()
 	require.NoError(c.testingT, err)
 
+	c.testingT.Cleanup(func() {
+		rm := exec.CommandContext(ctx, "/bin/sh", "-c", fmt.Sprintf(`cd "%s" && rm "bin/%s"`, binaryBuildContext, binaryName))
+
+		err := rm.Run()
+		require.NoError(c.testingT, err)
+	})
+
 	return binaryName
 }
 
