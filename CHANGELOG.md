@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.1.14](https://github.com/Wielewout/arc-cleaner/compare/v0.1.13...v0.1.14) (2024-09-15)
+
+
+### Bug Fixes
+
+* fix release artifact summary in pipeline ([036ac93](https://github.com/Wielewout/arc-cleaner/commit/036ac9305320eac91d5da1057eaa2895a3a84231))
+
 ## [0.1.13](https://github.com/Wielewout/arc-cleaner/compare/v0.1.12...v0.1.13) (2024-09-14)
 
 
