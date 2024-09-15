@@ -375,17 +375,19 @@ jobs:
       - name: Add step summary
         if: needs.vars.outputs.is_release == 'true'
         run: |-
+          newline=$'\n'
+
           binaries=""
           for binary in ${{ steps.binaries.outputs.binaries }} ; do
-            binaries="$binaries* `$binary`\n"
+            binaries="$binaries* \`$binary\`$newline"
           done
 
           container_images=""
           for container_image in ${{ steps.container_images.outputs.container_images }} ; do
-            container_images="$container_images* `$container_image`\n"
+            container_images="$container_images* \`$container_image\`$newline"
           done
 
-          chart="* `${{ steps.chart.outputs.chart }}`\n"
+          chart="* \`${{ steps.chart.outputs.chart }}\`$newline"
 
           cat << EOF >> $GITHUB_STEP_SUMMARY
           # Release ${{ needs.vars.outputs.release_name }}
