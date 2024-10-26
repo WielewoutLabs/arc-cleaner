@@ -21,7 +21,7 @@ jobs:
     runs-on: ubuntu-24.04
     steps:
       - name: Checkout
-        uses: actions/checkout@v4.1.7
+        uses: actions/checkout@v4.2.2
       - name: Lint PR title
         if: ${{ !cancelled() && (github.event_name == 'pull_request') }}
         id: lint_pr_title
