@@ -292,7 +292,7 @@ jobs:
           echo "binaries=$release_binaries" >> $GITHUB_OUTPUT
       - name: Release binaries
         if: needs.vars.outputs.is_release == 'true'
-        uses: shogo82148/actions-upload-release-asset@v1.7.7
+        uses: shogo82148/actions-upload-release-asset@v1.7.8
         with:
           upload_url: ${{ needs.vars.outputs.release_upload_url }}
           asset_path: bin/arc-cleaner-*
@@ -350,7 +350,7 @@ jobs:
             --package-path .cr-release-packages
       - name: Upload chart
         if: needs.vars.outputs.is_release == 'true'
-        uses: shogo82148/actions-upload-release-asset@v1.7.7
+        uses: shogo82148/actions-upload-release-asset@v1.7.8
         with:
           upload_url: ${{ needs.vars.outputs.release_upload_url }}
           asset_path: .cr-release-packages/arc-cleaner-${{ needs.vars.outputs.release_version }}.tgz
