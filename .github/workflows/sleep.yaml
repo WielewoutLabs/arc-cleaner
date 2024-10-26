@@ -19,7 +19,7 @@ jobs:
     name: Sleep
     runs-on: "${{ inputs.runner }}"
     container:
-      image: busybox:1.36.1-uclibc
+      image: busybox:1.37.0-uclibc
     steps:
       - name: Validate time input
         run: |
