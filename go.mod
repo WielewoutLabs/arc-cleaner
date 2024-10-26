@@ -5,7 +5,7 @@ go 1.23.0
 require (
 	github.com/actions/actions-runner-controller v0.27.7-0.20241008165103-96d1bbcf2fa9
 	github.com/cucumber/godog v0.14.1
-	github.com/docker/docker v27.1.1+incompatible
+	github.com/docker/docker v27.3.1+incompatible
 	github.com/mittwald/go-helm-client v0.12.14
 	github.com/spf13/cobra v1.8.1
 	github.com/spf13/viper v1.19.0
@@ -121,6 +121,7 @@ require (
 	github.com/moby/spdystream v0.4.0 // indirect
 	github.com/moby/sys/sequential v0.5.0 // indirect
 	github.com/moby/sys/user v0.1.0 // indirect
+	github.com/moby/sys/userns v0.1.0 // indirect
 	github.com/moby/term v0.5.0 // indirect
 	github.com/modern-go/concurrent v0.0.0-20180306012644-bacd9c7ef1dd // indirect
 	github.com/modern-go/reflect2 v1.0.2 // indirect
