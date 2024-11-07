@@ -32,7 +32,8 @@ ifeq ($(LOCAL_DEVCONTAINER),true)
 		DEVCONTAINER_TAG := sha-$(shell git rev-parse --short HEAD)
 		DEVCONTAINER ?= ghcr.io/wielewout/arc-cleaner-dev:$(DEVCONTAINER_TAG)
 else
-		DEVCONTAINER ?= ghcr.io/wielewout/arc-cleaner-dev:edge
+		# renovate:
+		DEVCONTAINER ?= ghcr.io/wielewout/arc-cleaner-dev:edge@sha256:fbfad482893fa851a7d144acd1ec97b507e714c856e9c665f2b69275cebcd952
 endif
 DEVCONTAINER_NAME := arc-cleaner-dev
 DEVCONTAINER_WORKDIR := /go/src/github.com/wielewout/arc-cleaner/
