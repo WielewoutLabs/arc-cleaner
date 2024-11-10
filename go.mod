@@ -1,6 +1,6 @@
 module github.com/wielewoutlabs/arc-cleaner
 
-go 1.23.0
+go 1.23.3
 
 require (
 	github.com/actions/actions-runner-controller v0.27.7-0.20241008165103-96d1bbcf2fa9
@@ -183,7 +183,6 @@ require (
 	google.golang.org/grpc v1.65.0 // indirect
 	google.golang.org/protobuf v1.34.2 // indirect
 	gopkg.in/evanphx/json-patch.v4 v4.12.0 // indirect
-	gopkg.in/evanphx/json-patch.v5 v5.7.0 // indirect
 	gopkg.in/inf.v0 v0.9.1 // indirect
 	gopkg.in/ini.v1 v1.67.0 // indirect
 	gopkg.in/yaml.v2 v2.4.0 // indirect
