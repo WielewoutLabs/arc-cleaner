@@ -20,9 +20,9 @@ RUN curl -L -o chart-releaser.tar.gz https://github.com/helm/chart-releaser/rele
 
 VOLUME [ "/var/run/docker.sock" ]
 
-VOLUME [ "/go/src/github.com/wielewout/arc-cleaner" ]
-WORKDIR /go/src/github.com/wielewout/arc-cleaner
-RUN git config --global --add safe.directory /go/src/github.com/wielewout/arc-cleaner
+VOLUME [ "/go/src/github.com/wielewoutlabs/arc-cleaner" ]
+WORKDIR /go/src/github.com/wielewoutlabs/arc-cleaner
+RUN git config --global --add safe.directory /go/src/github.com/wielewoutlabs/arc-cleaner
 
 COPY --chmod=0755 build/devcontainer/entrypoint.sh /
 ENTRYPOINT [ "/entrypoint.sh" ]

@@ -10,9 +10,9 @@ import (
 	"k8s.io/apimachinery/pkg/types"
 	"sigs.k8s.io/controller-runtime/pkg/client"
 
-	actionsgithubcom "github.com/wielewout/arc-cleaner/internal/actions.github.com"
-	"github.com/wielewout/arc-cleaner/internal/kubernetes"
-	"github.com/wielewout/arc-cleaner/internal/logging"
+	actionsgithubcom "github.com/wielewoutlabs/arc-cleaner/internal/actions.github.com"
+	"github.com/wielewoutlabs/arc-cleaner/internal/kubernetes"
+	"github.com/wielewoutlabs/arc-cleaner/internal/logging"
 )
 
 type App struct {

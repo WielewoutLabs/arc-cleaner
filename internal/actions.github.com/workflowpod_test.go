@@ -6,7 +6,7 @@ import (
 	"testing"
 
 	"github.com/stretchr/testify/suite"
-	actionsgithubcom "github.com/wielewout/arc-cleaner/internal/actions.github.com"
+	actionsgithubcom "github.com/wielewoutlabs/arc-cleaner/internal/actions.github.com"
 	corev1 "k8s.io/api/core/v1"
 	"k8s.io/apimachinery/pkg/types"
 	"sigs.k8s.io/controller-runtime/pkg/client"

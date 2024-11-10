@@ -1,4 +1,4 @@
-module github.com/wielewout/arc-cleaner
+module github.com/wielewoutlabs/arc-cleaner
 
 go 1.23.0
 

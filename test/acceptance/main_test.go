@@ -8,9 +8,9 @@ import (
 
 	"github.com/cucumber/godog"
 
-	"github.com/wielewout/arc-cleaner/test/acceptance/steps"
-	"github.com/wielewout/arc-cleaner/test/acceptance/system"
-	"github.com/wielewout/arc-cleaner/test/acceptance/userstory"
+	"github.com/wielewoutlabs/arc-cleaner/test/acceptance/steps"
+	"github.com/wielewoutlabs/arc-cleaner/test/acceptance/system"
+	"github.com/wielewoutlabs/arc-cleaner/test/acceptance/userstory"
 )
 
 func TestAcceptanceUserStoryValidation(t *testing.T) {

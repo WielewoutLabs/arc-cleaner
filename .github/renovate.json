@@ -21,7 +21,7 @@
     },
     {
       "description": "Automerge arc-cleaner-dev digest updates",
-      "matchPackagePatterns": ["wielewout/arc-cleaner-dev"],
+      "matchPackagePatterns": ["wielewoutlabs/arc-cleaner-dev"],
       "matchUpdateTypes": ["digest"],
       "automerge": true
     }

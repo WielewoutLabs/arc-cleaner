@@ -1,6 +1,6 @@
 package main
 
-import "github.com/wielewout/arc-cleaner/cmd"
+import "github.com/wielewoutlabs/arc-cleaner/cmd"
 
 func main() {
 	cmd.Execute()

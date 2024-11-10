@@ -9,7 +9,7 @@ import (
 	"k8s.io/apimachinery/pkg/types"
 	"sigs.k8s.io/controller-runtime/pkg/client"
 
-	"github.com/wielewout/arc-cleaner/internal/logging"
+	"github.com/wielewoutlabs/arc-cleaner/internal/logging"
 )
 
 func getEphemeralRunner(ctx context.Context, k8sClient client.Client, namespacedName types.NamespacedName) (*githubarcv1alpha1.EphemeralRunner, error) {

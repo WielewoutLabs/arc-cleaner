@@ -33,7 +33,7 @@ const (
 
 	containerfileName     = "build/container/Containerfile"
 	containerBuildContext = "../.."
-	defaultContainerImage = "ghcr.io/wielewout/arc-cleaner:acceptance-test"
+	defaultContainerImage = "ghcr.io/wielewoutlabs/arc-cleaner:acceptance-test"
 
 	releaseName    = "arc-cleaner"
 	localChartPath = "../../deploy/chart"

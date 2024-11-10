@@ -15,8 +15,8 @@ PKG := ./...
 DEBUG := true
 
 LD_FLAGS =  -extldflags \"-static\" \
-	-X \"github.com/wielewout/arc-cleaner/cmd.version=$(VERSION)\" \
-	-X \"github.com/wielewout/arc-cleaner/cmd.commit=$(COMMIT)\"
+	-X \"github.com/wielewoutlabs/arc-cleaner/cmd.version=$(VERSION)\" \
+	-X \"github.com/wielewoutlabs/arc-cleaner/cmd.commit=$(COMMIT)\"
 
 ifeq ($(DEBUG),true)
     BUILD_ARGS = -ldflags "$(LD_FLAGS)"
@@ -30,13 +30,13 @@ DOCKER_CONFIG := ~/.docker
 LOCAL_DEVCONTAINER := false
 ifeq ($(LOCAL_DEVCONTAINER),true)
 		DEVCONTAINER_TAG := sha-$(shell git rev-parse --short HEAD)
-		DEVCONTAINER ?= ghcr.io/wielewout/arc-cleaner-dev:$(DEVCONTAINER_TAG)
+		DEVCONTAINER ?= ghcr.io/wielewoutlabs/arc-cleaner-dev:$(DEVCONTAINER_TAG)
 else
 		# renovate:
-		DEVCONTAINER ?= ghcr.io/wielewout/arc-cleaner-dev:edge@sha256:fbfad482893fa851a7d144acd1ec97b507e714c856e9c665f2b69275cebcd952
+		DEVCONTAINER ?= ghcr.io/wielewoutlabs/arc-cleaner-dev:edge@sha256:fbfad482893fa851a7d144acd1ec97b507e714c856e9c665f2b69275cebcd952
 endif
 DEVCONTAINER_NAME := arc-cleaner-dev
-DEVCONTAINER_WORKDIR := /go/src/github.com/wielewout/arc-cleaner/
+DEVCONTAINER_WORKDIR := /go/src/github.com/wielewoutlabs/arc-cleaner/
 DEVCONTAINER_RUN := docker run -d --volume $(ROOT):$(DEVCONTAINER_WORKDIR) --volume $(DOCKER_SOCKET):/var/run/docker.sock --volume $(DOCKER_CONFIG):/root/.docker --name $(DEVCONTAINER_NAME) $(DEVCONTAINER)
 
 DEVCONTAINER_EXEC := docker exec -it $(DEVCONTAINER_NAME)

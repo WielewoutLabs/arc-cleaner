@@ -7,10 +7,10 @@ import (
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
 
-	"github.com/wielewout/arc-cleaner/internal/app"
-	"github.com/wielewout/arc-cleaner/internal/kubernetes"
-	"github.com/wielewout/arc-cleaner/internal/logging"
-	"github.com/wielewout/arc-cleaner/internal/signals"
+	"github.com/wielewoutlabs/arc-cleaner/internal/app"
+	"github.com/wielewoutlabs/arc-cleaner/internal/kubernetes"
+	"github.com/wielewoutlabs/arc-cleaner/internal/logging"
+	"github.com/wielewoutlabs/arc-cleaner/internal/signals"
 )
 
 var (

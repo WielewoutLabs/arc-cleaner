@@ -4,7 +4,7 @@ import (
 	"testing"
 
 	"github.com/stretchr/testify/suite"
-	"github.com/wielewout/arc-cleaner/test/acceptance/userstory"
+	"github.com/wielewoutlabs/arc-cleaner/test/acceptance/userstory"
 )
 
 type ParseTestSuite struct {

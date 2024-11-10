@@ -11,7 +11,7 @@ permissions:
 
 env:
   # renovate:
-  devcontainer: ghcr.io/wielewout/arc-cleaner-dev:edge@sha256:fbfad482893fa851a7d144acd1ec97b507e714c856e9c665f2b69275cebcd952
+  devcontainer: ghcr.io/wielewoutlabs/arc-cleaner-dev:edge@sha256:fbfad482893fa851a7d144acd1ec97b507e714c856e9c665f2b69275cebcd952
   workdir: /__w/arc-cleaner/arc-cleaner
 
 jobs:
@@ -66,7 +66,7 @@ jobs:
       release_html_url: ${{ steps.release_please.outputs.html_url }}
       is_main_branch: ${{ github.ref_type == 'branch' && github.ref_name == 'main' }}
       has_devcontainer_changed: ${{ github.event_name != 'workflow_dispatch' && steps.paths_filter.outputs.devcontainer }}
-      devcontainer: ${{ (github.event_name != 'workflow_dispatch' && steps.paths_filter.outputs.devcontainer == 'true' && format('ghcr.io/wielewout/arc-cleaner-dev:{0}', steps.vars.outputs.sha_tag)) || env.devcontainer }}
+      devcontainer: ${{ (github.event_name != 'workflow_dispatch' && steps.paths_filter.outputs.devcontainer == 'true' && format('ghcr.io/wielewoutlabs/arc-cleaner-dev:{0}', steps.vars.outputs.sha_tag)) || env.devcontainer }}
       sha_tag: ${{ steps.vars.outputs.sha_tag }}
 
   devcontainer:
@@ -86,7 +86,7 @@ jobs:
         uses: docker/metadata-action@v5.5.1
         with:
           images: |
-            ghcr.io/wielewout/arc-cleaner-dev
+            ghcr.io/wielewoutlabs/arc-cleaner-dev
           flavor: |
             latest=false
           tags: |
@@ -175,7 +175,7 @@ jobs:
         uses: docker/metadata-action@v5.5.1
         with:
           images: |
-            ghcr.io/wielewout/arc-cleaner
+            ghcr.io/wielewoutlabs/arc-cleaner
             wielewout/arc-cleaner
           flavor: |
             latest=false

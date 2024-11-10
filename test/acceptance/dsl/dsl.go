@@ -4,8 +4,8 @@ import (
 	"net/http"
 	"time"
 
-	"github.com/wielewout/arc-cleaner/test/acceptance/driver"
-	"github.com/wielewout/arc-cleaner/test/acceptance/system"
+	"github.com/wielewoutlabs/arc-cleaner/test/acceptance/driver"
+	"github.com/wielewoutlabs/arc-cleaner/test/acceptance/system"
 )
 
 type Dsl struct {

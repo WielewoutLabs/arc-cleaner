@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"net/http"
 
-	"github.com/wielewout/arc-cleaner/test/acceptance/system"
+	"github.com/wielewoutlabs/arc-cleaner/test/acceptance/system"
 )
 
 type Health struct {

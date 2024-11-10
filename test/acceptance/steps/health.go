@@ -4,8 +4,8 @@ import (
 	"context"
 
 	"github.com/cucumber/godog"
-	"github.com/wielewout/arc-cleaner/test/acceptance/dsl"
-	"github.com/wielewout/arc-cleaner/test/acceptance/system"
+	"github.com/wielewoutlabs/arc-cleaner/test/acceptance/dsl"
+	"github.com/wielewoutlabs/arc-cleaner/test/acceptance/system"
 )
 
 func InitializeHealthScenario(ctx *godog.ScenarioContext, systemConfig system.Config) {
