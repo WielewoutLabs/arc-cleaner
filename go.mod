@@ -3,7 +3,7 @@ module github.com/wielewoutlabs/arc-cleaner
 go 1.23.0
 
 require (
-	github.com/actions/actions-runner-controller v0.27.7-0.20241008165103-96d1bbcf2fa9
+	github.com/actions/actions-runner-controller v0.27.7-0.20241114163949-8b36ea90ebe8
 	github.com/cucumber/godog v0.14.1
 	github.com/docker/docker v27.3.1+incompatible
 	github.com/mittwald/go-helm-client v0.12.14
@@ -183,7 +183,6 @@ require (
 	google.golang.org/grpc v1.65.0 // indirect
 	google.golang.org/protobuf v1.34.2 // indirect
 	gopkg.in/evanphx/json-patch.v4 v4.12.0 // indirect
-	gopkg.in/evanphx/json-patch.v5 v5.7.0 // indirect
 	gopkg.in/inf.v0 v0.9.1 // indirect
 	gopkg.in/ini.v1 v1.67.0 // indirect
 	gopkg.in/yaml.v2 v2.4.0 // indirect
