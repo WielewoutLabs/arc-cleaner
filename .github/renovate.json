@@ -34,7 +34,7 @@
       ],
       "automerge": true,
       "matchPackageNames": [
-        "/wielewoutlabs/arc-cleaner-dev/"
+        "/wielewoutlabs\\/arc-cleaner-dev/"
       ]
     }
   ],
