@@ -4,40 +4,58 @@
     "config:recommended",
     ":automergeMinor"
   ],
-  "reviewers": ["Wielewout"],
+  "reviewers": [
+    "Wielewout"
+  ],
   "postUpdateOptions": [
     "gomodTidy"
   ],
   "packageRules": [
     {
-      "matchDatasources": ["golang-version"],
+      "matchDatasources": [
+        "golang-version"
+      ],
       "rangeStrategy": "bump"
     },
     {
       "description": "Automerge golang digest updates",
-      "matchPackagePatterns": ["golang"],
-      "matchUpdateTypes": ["digest"],
-      "automerge": true
+      "matchUpdateTypes": [
+        "digest"
+      ],
+      "automerge": true,
+      "matchPackageNames": [
+        "/golang/"
+      ]
     },
     {
       "description": "Automerge arc-cleaner-dev digest updates",
-      "matchPackagePatterns": ["wielewoutlabs/arc-cleaner-dev"],
-      "matchUpdateTypes": ["digest"],
-      "automerge": true
+      "matchUpdateTypes": [
+        "digest"
+      ],
+      "automerge": true,
+      "matchPackageNames": [
+        "/wielewoutlabs\\/arc-cleaner-dev/"
+      ]
     }
   ],
-  "regexManagers": [
+  "customManagers": [
     {
+      "customType": "regex",
       "datasourceTemplate": "docker",
-      "fileMatch": ["^Makefile$"],
+      "fileMatch": [
+        "^Makefile$"
+      ],
       "matchStrings": [
         "#\\s?renovate:(\\s?versioning=(?<versioning>[a-z-]+?))?\\s*.*DEVCONTAINER\\s?[:?]?=\\s?(?<depName>([a-zA-Z0-9\\-\\.]+(:[0-9]+)?\\/)?[a-zA-Z0-9\\-_\\.\\/]+)(:(?<currentValue>[a-zA-Z0-9][a-zA-Z0-9\\-_\\.]*))?(@(?<currentDigest>sha256:[a-f0-9]+))?\\s"
       ],
       "versioningTemplate": "{{#if versioning}}{{versioning}}{{else}}docker{{/if}}"
     },
     {
+      "customType": "regex",
       "datasourceTemplate": "docker",
-      "fileMatch": ["(^|/)*.yaml$"],
+      "fileMatch": [
+        "(^|/)*.yaml$"
+      ],
       "matchStrings": [
         "#\\s?renovate:(\\s?versioning=(?<versioning>[a-z-]+?))?\\s*.*devcontainer\\s?:\\s?(?<depName>([a-zA-Z0-9\\-\\.]+(:[0-9]+)?\\/)?[a-zA-Z0-9\\-_\\.\\/]+)(:(?<currentValue>[a-zA-Z0-9][a-zA-Z0-9\\-_\\.]*))?(@(?<currentDigest>sha256:[a-f0-9]+))?\\s"
       ],
