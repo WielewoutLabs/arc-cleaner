@@ -26,8 +26,8 @@ github.com/Microsoft/hcsshim v0.11.5 h1:haEcLNpj9Ka1gd3B3tAEs9CpE0c+1IhoL59w/exY
 github.com/Microsoft/hcsshim v0.11.5/go.mod h1:MV8xMfmECjl5HdO7U/3/hFVnkmSBjAjmA09d4bExKcU=
 github.com/Shopify/logrus-bugsnag v0.0.0-20171204204709-577dee27f20d h1:UrqY+r/OJnIp5u0s1SbQ8dVfLCZJsnvazdBP5hS4iRs=
 github.com/Shopify/logrus-bugsnag v0.0.0-20171204204709-577dee27f20d/go.mod h1:HI8ITrYtUY+O+ZhtlqUnD8+KwNPOyugEhfP9fdUIaEQ=
-github.com/actions/actions-runner-controller v0.27.7-0.20241008165103-96d1bbcf2fa9 h1:SCj04/iDVU6JJ5orcJa7SudTjTbmw3TyDgzywqb/vfk=
-github.com/actions/actions-runner-controller v0.27.7-0.20241008165103-96d1bbcf2fa9/go.mod h1:+F6+QZL13qbwXHch2vNeUg3BWHTqB0oqc0wThsEiFWg=
+github.com/actions/actions-runner-controller v0.27.7-0.20241114163949-8b36ea90ebe8 h1:7gp5Ah6W69KTYQ7h/RNjDY8CT6Yw/TqHgNT9w9Az8mQ=
+github.com/actions/actions-runner-controller v0.27.7-0.20241114163949-8b36ea90ebe8/go.mod h1:+F6+QZL13qbwXHch2vNeUg3BWHTqB0oqc0wThsEiFWg=
 github.com/alecthomas/template v0.0.0-20160405071501-a0175ee3bccc/go.mod h1:LOuyumcjzFXgccqObfd/Ljyb9UuFJ6TxHnclSeseNhc=
 github.com/alecthomas/units v0.0.0-20151022065526-2efee857e7cf/go.mod h1:ybxpYRFXyAe+OPACYpWeL0wqObRcbAqCMya13uyzqw0=
 github.com/armon/go-socks5 v0.0.0-20160902184237-e75332964ef5 h1:0CwZNZbxp69SHPdPJAN/hZIm0C4OItdklCFmMRWYpio=
