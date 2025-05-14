@@ -343,7 +343,7 @@ jobs:
       - name: Login to GitHub Container Registry
         run: |-
           helm registry login \
-            ghcr.io
+            ghcr.io \
             --username "${{ github.actor }}" \
             --password "${{ secrets.GITHUB_TOKEN }}"
       - name: Add version to chart
