@@ -1,5 +1,5 @@
 apiVersion: v2
-name: arc-cleaner
+name: arc-cleaner-chart
 description: A cleaner for GitHub ARC
 type: application
 version: 0.0.0
