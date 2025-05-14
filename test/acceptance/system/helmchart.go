@@ -17,6 +17,7 @@ import (
 	"github.com/docker/docker/api/types/image"
 	helmclient "github.com/mittwald/go-helm-client"
 	"github.com/mittwald/go-helm-client/values"
+	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 	"github.com/testcontainers/testcontainers-go"
 	corev1 "k8s.io/api/core/v1"
@@ -259,7 +260,10 @@ func freeLocalPort(c *Config) int {
 
 	listener, err := net.ListenTCP("tcp", address)
 	require.NoError(c.testingT, err)
-	defer listener.Close()
+	defer func() {
+		err := listener.Close()
+		assert.NoError(c.testingT, err)
+	}()
 
 	return listener.Addr().(*net.TCPAddr).Port
 }

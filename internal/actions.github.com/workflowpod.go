@@ -47,7 +47,7 @@ func (r *WorkflowPodReconciler) Reconcile(ctx context.Context, namespacedName ty
 		return nil
 	}
 
-	runnerPodName, ok := workflowPod.ObjectMeta.Labels["runner-pod"]
+	runnerPodName, ok := workflowPod.Labels["runner-pod"]
 	if !ok {
 		logger.Debug("skipping", "reason", "pod is no workflow pod without 'runner-pod' label")
 		return nil

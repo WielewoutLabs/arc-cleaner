@@ -1,20 +1,20 @@
 FROM golang:alpine@sha256:c694a4d291a13a9f9d94933395673494fc2cc9d4777b85df3a7e70b3492d3574
 
 # renovate: github_repository=github.com/golangci/golangci-lint
-ARG GOLANGCI_LINT_VERSION=1.60.3
+ARG GOLANGCI_LINT_VERSION=2.0.0
 # renovate: github_repository=github.com/helm/chart-releaser
 ARG HELM_CHART_RELEASER_VERSION=1.6.1
 
-RUN go install github.com/golangci/golangci-lint/cmd/golangci-lint@v$GOLANGCI_LINT_VERSION
 RUN apk update \
     && apk add \
-    git \
-    make \
-    curl \
-    upx \
-    docker-cli \
-    docker-cli-buildx \
-    helm
+        git \
+        make \
+        curl \
+        upx \
+        docker-cli \
+        docker-cli-buildx \
+        helm
+RUN curl -sSfL https://raw.githubusercontent.com/golangci/golangci-lint/HEAD/install.sh | sh -s -- -b $(go env GOPATH)/bin v$GOLANGCI_LINT_VERSION
 RUN curl -L -o chart-releaser.tar.gz https://github.com/helm/chart-releaser/releases/download/v$HELM_CHART_RELEASER_VERSION/chart-releaser_${HELM_CHART_RELEASER_VERSION}_$(go env GOOS)_$(go env GOARCH).tar.gz \
     && tar -xvf chart-releaser.tar.gz cr \
     && mv cr /go/bin/ \
