@@ -60,6 +60,17 @@
         "#\\s?renovate:(\\s?versioning=(?<versioning>[a-z-]+?))?\\s*.*devcontainer\\s?:\\s?(?<depName>([a-zA-Z0-9\\-\\.]+(:[0-9]+)?\\/)?[a-zA-Z0-9\\-_\\.\\/]+)(:(?<currentValue>[a-zA-Z0-9][a-zA-Z0-9\\-_\\.]*))?(@(?<currentDigest>sha256:[a-f0-9]+))?\\s"
       ],
       "versioningTemplate": "{{#if versioning}}{{versioning}}{{else}}docker{{/if}}"
+    },
+    {
+      "customType": "regex",
+      "datasourceTemplate": "github-releases",
+      "fileMatch": [
+        "(^|/)Containerfile$"
+      ],
+      "matchStrings": [
+        "#\\s?renovate: github_repository=(?<depName>[^\\s]*?)( versioning=(?<versioning>[^\\s]*?))?( extract_version=(?<extractVersion>[^\\s]*?))?\\s?ARG\\s+[\\w\\-]*_[vV][eE][rR][sS][iI][oO][nN]=\"?(?<currentValue>[\\w+\\.\\-]*)\"?"
+      ],
+      "versioningTemplate": "{{#if versioning}}{{{versioning}}}{{else}}semver{{/if}}"
     }
   ]
 }
