@@ -1,5 +1,16 @@
 # Changelog
 
+## [0.3.0](https://github.com/WielewoutLabs/arc-cleaner/compare/v0.2.2...v0.3.0) (2025-05-15)
+
+
+### ⚠ BREAKING CHANGES
+
+* remove broken (and deprecated) charts through gh-pages
+
+### Bug Fixes
+
+* remove broken (and deprecated) charts through gh-pages ([69d6cf9](https://github.com/WielewoutLabs/arc-cleaner/commit/69d6cf9095ea13dd4d1d8fe0b567f65f9142cac5))
+
 ## [0.2.2](https://github.com/WielewoutLabs/arc-cleaner/compare/v0.2.1...v0.2.2) (2025-05-15)
 
 
