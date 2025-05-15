@@ -366,7 +366,7 @@ jobs:
         run: |-
           helm push \
             arc-cleaner-chart-${{ needs.vars.outputs.release_version }}.tgz \
-            oci://ghcr.io/${{ github.repository_owner }}
+            $(echo "oci://ghcr.io/${{ github.repository_owner }}" | tr '[:upper:]' '[:lower:]')
           echo "chart=arc-cleaner-chart-${{ needs.vars.outputs.release_version }}.tgz" >> $GITHUB_OUTPUT
 
       - name: "[Deprecated] Release chart on github pages"
