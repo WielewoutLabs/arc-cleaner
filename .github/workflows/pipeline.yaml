@@ -369,26 +369,6 @@ jobs:
             $(echo "oci://ghcr.io/${{ github.repository_owner }}" | tr '[:upper:]' '[:lower:]')
           echo "chart=arc-cleaner-chart-${{ needs.vars.outputs.release_version }}.tgz" >> $GITHUB_OUTPUT
 
-      - name: "[Deprecated] Release chart on github pages"
-        if: needs.vars.outputs.is_release == 'true'
-        run: |-
-          rm -rf .cr-index
-          mkdir -p .cr-index
-
-          sed -i 's/arc-cleaner-chart/arc-cleaner/g' deploy/chart/Chart.yaml
-
-          cr package deploy/chart \
-            --package-path .cr-release-packages
-
-          cr index \
-            --token ${{ secrets.GITHUB_TOKEN }} \
-            --package-path .cr-release-packages \
-            --index-path .cr-index \
-            --owner ${{ github.repository_owner }} \
-            --git-repo ${{ github.event.repository.name }} \
-            --release-name-template "v{{ .Version }}" \
-            --push
-
       - name: Add step summary
         if: needs.vars.outputs.is_release == 'true'
         run: |-
