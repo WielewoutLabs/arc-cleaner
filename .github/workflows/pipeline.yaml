@@ -353,7 +353,7 @@ jobs:
       - name: Package chart
         if: needs.vars.outputs.is_release == 'true'
         run: |-
-          cr package deploy/chart
+          helm package deploy/chart
       - name: Release chart
         if: needs.vars.outputs.is_release == 'true'
         id: chart
