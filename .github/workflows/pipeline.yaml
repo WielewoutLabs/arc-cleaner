@@ -354,6 +354,12 @@ jobs:
         if: needs.vars.outputs.is_release == 'true'
         run: |-
           helm package deploy/chart
+      - name: Upload chart
+        if: needs.vars.outputs.is_release == 'true'
+        uses: shogo82148/actions-upload-release-asset@v1.8.0
+        with:
+          upload_url: ${{ needs.vars.outputs.release_upload_url }}
+          asset_path: arc-cleaner-chart-${{ needs.vars.outputs.release_version }}.tgz
       - name: Release chart
         if: needs.vars.outputs.is_release == 'true'
         id: chart
@@ -362,12 +368,6 @@ jobs:
             arc-cleaner-chart-${{ needs.vars.outputs.release_version }}.tgz \
             oci://ghcr.io/${{ github.repository_owner }}
           echo "chart=arc-cleaner-chart-${{ needs.vars.outputs.release_version }}.tgz" >> $GITHUB_OUTPUT
-      - name: Upload chart
-        if: needs.vars.outputs.is_release == 'true'
-        uses: shogo82148/actions-upload-release-asset@v1.8.0
-        with:
-          upload_url: ${{ needs.vars.outputs.release_upload_url }}
-          asset_path: arc-cleaner-chart-${{ needs.vars.outputs.release_version }}.tgz
 
       - name: "[Deprecated] Release chart on github pages"
         if: needs.vars.outputs.is_release == 'true'
