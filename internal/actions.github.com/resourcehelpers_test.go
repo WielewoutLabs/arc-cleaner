@@ -6,7 +6,6 @@ import (
 	"strings"
 
 	githubv1alpha1 "github.com/actions/actions-runner-controller/apis/actions.github.com/v1alpha1"
-	actionsgithubcom "github.com/actions/actions-runner-controller/controllers/actions.github.com"
 	corev1 "k8s.io/api/core/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/runtime"
@@ -154,7 +153,7 @@ func newRunnerPodTemplateSpec() *corev1.PodTemplateSpec {
 		Spec: corev1.PodSpec{
 			Containers: []corev1.Container{
 				{
-					Name:    actionsgithubcom.EphemeralRunnerContainerName,
+					Name:    githubv1alpha1.EphemeralRunnerContainerName,
 					Image:   runnerImage,
 					Command: []string{"/runner/run.sh"},
 					VolumeMounts: []corev1.VolumeMount{
