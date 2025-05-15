@@ -1,5 +1,13 @@
 # Changelog
 
+## [0.2.1](https://github.com/WielewoutLabs/arc-cleaner/compare/v0.2.0...v0.2.1) (2025-05-15)
+
+
+### Bug Fixes
+
+* **deps:** update github.com/actions/actions-runner-controller digest to 43f1cd0 ([#75](https://github.com/WielewoutLabs/arc-cleaner/issues/75)) ([618db68](https://github.com/WielewoutLabs/arc-cleaner/commit/618db68a692e356846e64c19ff53e321ce1b454b))
+* fix packaging helm chart on release ([d7d7d6e](https://github.com/WielewoutLabs/arc-cleaner/commit/d7d7d6efd8c37113ee0f135268b257ab29e29771))
+
 ## [0.2.0](https://github.com/WielewoutLabs/arc-cleaner/compare/v0.1.14...v0.2.0) (2025-05-15)
 
 
