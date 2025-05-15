@@ -1,5 +1,14 @@
 # Changelog
 
+## [0.2.2](https://github.com/WielewoutLabs/arc-cleaner/compare/v0.2.1...v0.2.2) (2025-05-15)
+
+
+### Bug Fixes
+
+* add configmap to helm chart ([f2789c4](https://github.com/WielewoutLabs/arc-cleaner/commit/f2789c462d657da87f4fd114c99a2dbf9e18fd46))
+* add role and role binding ([5b4735b](https://github.com/WielewoutLabs/arc-cleaner/commit/5b4735b578d4936ca3d44fb9625ab5df7918f74c))
+* fix oci chart requiring a lowercase repo in ghcr ([1f9477e](https://github.com/WielewoutLabs/arc-cleaner/commit/1f9477e3bf5322452a6bf3e49125f6ada3b1ce19))
+
 ## [0.2.1](https://github.com/WielewoutLabs/arc-cleaner/compare/v0.2.0...v0.2.1) (2025-05-15)
 
 
