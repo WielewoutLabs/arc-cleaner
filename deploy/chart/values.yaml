@@ -1,3 +1,13 @@
+config:
+  log:
+    level: info
+
+  listenAddress: :8080
+
+  namespace: "{{ .Release.Namespace }}"
+  period: 5s
+  dryrun: false
+
 replicaCount: 1
 
 image:

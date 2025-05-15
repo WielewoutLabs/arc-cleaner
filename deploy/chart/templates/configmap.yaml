@@ -1,0 +1,9 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "arc-cleaner.fullname" . }}
+  labels:
+    {{- include "arc-cleaner.labels" . | nindent 4 }}
+data:
+  config.yaml: |
+    {{- (tpl (toYaml .Values.config) .) | nindent 4 }}
