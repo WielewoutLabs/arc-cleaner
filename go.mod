@@ -3,7 +3,7 @@ module github.com/wielewoutlabs/arc-cleaner
 go 1.24.3
 
 require (
-	github.com/actions/actions-runner-controller v0.27.7-0.20250515085634-43f1cd0dac0c
+	github.com/actions/actions-runner-controller v0.27.7-0.20250516142106-1dbb88cb9ee8
 	github.com/cucumber/godog v0.15.0
 	github.com/docker/docker v28.1.1+incompatible
 	github.com/mittwald/go-helm-client v0.12.17
