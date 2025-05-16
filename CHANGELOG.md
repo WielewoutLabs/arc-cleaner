@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.3.1](https://github.com/WielewoutLabs/arc-cleaner/compare/v0.3.0...v0.3.1) (2025-05-16)
+
+
+### Bug Fixes
+
+* **deps:** update kubernetes packages to v0.33.1 ([#79](https://github.com/WielewoutLabs/arc-cleaner/issues/79)) ([abe36a8](https://github.com/WielewoutLabs/arc-cleaner/commit/abe36a89aa38a37f5cbcaa8a06efb92e26740bb0))
+
 ## [0.3.0](https://github.com/WielewoutLabs/arc-cleaner/compare/v0.2.2...v0.3.0) (2025-05-15)
 
 
