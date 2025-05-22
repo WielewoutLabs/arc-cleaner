@@ -1,8 +1,8 @@
 FROM golang:alpine@sha256:ef18ee7117463ac1055f5a370ed18b8750f01589f13ea0b48642f5792b234044
 
-# renovate: github_repository=github.com/golangci/golangci-lint
+# renovate: github_repository=golangci/golangci-lint
 ARG GOLANGCI_LINT_VERSION=2.0.0
-# renovate: github_repository=github.com/helm/chart-releaser
+# renovate: github_repository=helm/chart-releaser
 ARG HELM_CHART_RELEASER_VERSION=1.6.1
 
 RUN apk update \
