@@ -1,76 +1,88 @@
 {
-  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
-  "extends": [
-    "config:recommended",
-    ":automergeMinor"
-  ],
+  "branchPrefix": "renovate/",
+  "dependencyDashboard": true,
+  "dependencyDashboardApproval": false,
+  "dependencyDashboardAutoclose": false,
   "reviewers": [
     "Wielewout"
   ],
-  "postUpdateOptions": [
-    "gomodTidy"
+  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+  "extends": [
+    "config:recommended",
+    ":semanticCommits",
+    ":semanticCommitTypeAll(fix)",
+    ":automergeMinor"
   ],
-  "packageRules": [
-    {
-      "matchDatasources": [
-        "golang-version"
-      ],
-      "rangeStrategy": "bump"
-    },
-    {
-      "description": "Automerge golang digest updates",
-      "matchUpdateTypes": [
-        "digest"
-      ],
-      "automerge": true,
-      "matchPackageNames": [
-        "/golang/"
-      ]
-    },
-    {
-      "description": "Automerge arc-cleaner-dev digest updates",
-      "matchUpdateTypes": [
-        "digest"
-      ],
-      "automerge": true,
-      "matchPackageNames": [
-        "/wielewoutlabs\\/arc-cleaner-dev/"
-      ]
-    }
-  ],
+  "helmv3": {
+    "managerFilePatterns": [
+      "/(^|/)Chart\\.yaml$/"
+    ],
+    "commitMessageTopic": "update {{depName}}",
+    "registryAliases": {}
+  },
   "customManagers": [
     {
       "customType": "regex",
       "datasourceTemplate": "docker",
       "managerFilePatterns": [
-        "/^Makefile$/"
+        "/(^|/)Chart\\.yaml$/"
       ],
       "matchStrings": [
-        "#\\s?renovate:(\\s?versioning=(?<versioning>[a-z-]+?))?\\s*.*DEVCONTAINER\\s?[:?]?=\\s?(?<depName>([a-zA-Z0-9\\-\\.]+(:[0-9]+)?\\/)?[a-zA-Z0-9\\-_\\.\\/]+)(:(?<currentValue>[a-zA-Z0-9][a-zA-Z0-9\\-_\\.]*))?(@(?<currentDigest>sha256:[a-f0-9]+))?\\s"
+        "#\\s?renovate: image=(?<depName>.*?)( versioning=(?<versioning>.*?))?( extract_version=(?<extractVersion>.*?))?\\s?(app)?[vV]ersion:\\s?\"?(?<currentValue>[\\w+\\.\\-]*)\"?"
       ],
-      "versioningTemplate": "{{#if versioning}}{{versioning}}{{else}}docker{{/if}}"
+      "versioningTemplate": "{{#if versioning}}{{{versioning}}}{{else}}docker{{/if}}"
     },
     {
       "customType": "regex",
       "datasourceTemplate": "docker",
       "managerFilePatterns": [
-        "/(^|/)*.yaml$/"
+        "/(^|/)External\\.yaml$/"
       ],
       "matchStrings": [
-        "#\\s?renovate:(\\s?versioning=(?<versioning>[a-z-]+?))?\\s*.*devcontainer\\s?:\\s?(?<depName>([a-zA-Z0-9\\-\\.]+(:[0-9]+)?\\/)?[a-zA-Z0-9\\-_\\.\\/]+)(:(?<currentValue>[a-zA-Z0-9][a-zA-Z0-9\\-_\\.]*))?(@(?<currentDigest>sha256:[a-f0-9]+))?\\s"
+        "name:\\s+\"?(?<chartName>.*?)\"?\\s+(.*\\s)?repository:\\s+\"?oci://(?<registryRef>.*?)\"?\\s+(.*\\s)?version:\\s+\"?(?<currentValue>[\\w\\.\\-]*)\"?"
       ],
-      "versioningTemplate": "{{#if versioning}}{{versioning}}{{else}}docker{{/if}}"
+      "packageNameTemplate": "{{registryRef}}/{{chartName}}"
+    },
+    {
+      "customType": "regex",
+      "datasourceTemplate": "docker",
+      "managerFilePatterns": [
+        "/(^|/)values\\.y[a]?ml$/"
+      ],
+      "matchStrings": [
+        "#\\s?renovate:( versioning=(?<versioning>.*?))?( extract_version=(?<extractVersion>.*?))?\\s+image:\\s?\"?(?<depName>[^:]*?):(?<currentValue>[\\w+\\.\\-]*)\"?"
+      ],
+      "versioningTemplate": "{{#if versioning}}{{{versioning}}}{{else}}docker{{/if}}"
+    },
+    {
+      "customType": "regex",
+      "datasourceTemplate": "helm",
+      "managerFilePatterns": [
+        "/(^|/)values\\.y[a]?ml$/"
+      ],
+      "matchStrings": [
+        "#\\s?renovate: repository=(?<registryUrl>.*?) chart=(?<depName>.*?)\\s?[\\w\\-]*[vV]ersion:\\s?\"?(?<currentValue>[\\w\\.\\-]*)\"?"
+      ]
     },
     {
       "customType": "regex",
       "datasourceTemplate": "github-releases",
       "managerFilePatterns": [
-        "/(^|/)Containerfile$/"
+        "/(^|/)helm-charts\\.y[a]?ml$/"
       ],
       "matchStrings": [
-        "#\\s?renovate: github_repository=(?<depName>[^\\s]*?)( versioning=(?<versioning>[^\\s]*?))?( extract_version=(?<extractVersion>[^\\s]*?))?\\s?ARG\\s+[\\w\\-]*_[vV][eE][rR][sS][iI][oO][nN]=\"?(?<currentValue>[\\w+\\.\\-]*)\"?"
+        "#\\s?renovate: github_repository=(?<depName>.*?)( versioning=(?<versioning>.*?))?( extract_version=(?<extractVersion>.*?))?\\s*[\\w\\-]*_version:\\s?\"?(?<currentValue>[\\w+\\.\\-]*)\"?"
       ],
       "versioningTemplate": "{{#if versioning}}{{{versioning}}}{{else}}semver{{/if}}"
+    }
+  ],
+  "packageRules": [
+    {
+      "description": "Automerge external chart updates",
+      "automerge": true,
+      "matchFileNames": [
+        "/External\\.yaml/"
+      ]
     }
   ]
 }
