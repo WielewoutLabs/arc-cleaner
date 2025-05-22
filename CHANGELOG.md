@@ -1,5 +1,13 @@
 # Changelog
 
+## [0.3.2](https://github.com/WielewoutLabs/arc-cleaner/compare/v0.3.1...v0.3.2) (2025-05-22)
+
+
+### Bug Fixes
+
+* **deps:** update github.com/actions/actions-runner-controller digest to 1dbb88c ([#81](https://github.com/WielewoutLabs/arc-cleaner/issues/81)) ([ac5397d](https://github.com/WielewoutLabs/arc-cleaner/commit/ac5397d514364bef921247f1da9903b916205e46))
+* **deps:** update module sigs.k8s.io/controller-runtime to v0.21.0 ([#85](https://github.com/WielewoutLabs/arc-cleaner/issues/85)) ([d2fbe39](https://github.com/WielewoutLabs/arc-cleaner/commit/d2fbe39f002eb8a7fea21b34b8cba91466149fef))
+
 ## [0.3.1](https://github.com/WielewoutLabs/arc-cleaner/compare/v0.3.0...v0.3.1) (2025-05-16)
 
 
