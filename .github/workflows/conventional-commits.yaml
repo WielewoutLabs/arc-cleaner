@@ -32,6 +32,8 @@ jobs:
         if: ${{ !cancelled() }}
         id: lint_commits
         uses: wagoid/commitlint-github-action@v6
+        with:
+          configFile: .github/commitlint.config.mjs
       - name: Add summary
         if: ${{ !cancelled() }}
         uses: actions/github-script@v7.0.1
