@@ -1,5 +1,17 @@
 # Changelog
 
+## [0.3.3](https://github.com/WielewoutLabs/arc-cleaner/compare/v0.3.2...v0.3.3) (2025-07-03)
+
+
+### Bug Fixes
+
+* **deps:** update kubernetes packages to v0.33.2 ([#113](https://github.com/WielewoutLabs/arc-cleaner/issues/113)) ([34f6865](https://github.com/WielewoutLabs/arc-cleaner/commit/34f6865351f0255fdc414dafd0c96ef3e61cada5))
+* **deps:** update module github.com/docker/docker to v28.2.0+incompatible ([#94](https://github.com/WielewoutLabs/arc-cleaner/issues/94)) ([d451496](https://github.com/WielewoutLabs/arc-cleaner/commit/d451496c4ac3d3d20698ad245c658384a4fca2f5))
+* **deps:** update module github.com/docker/docker to v28.2.1+incompatible ([#96](https://github.com/WielewoutLabs/arc-cleaner/issues/96)) ([fd6d2b9](https://github.com/WielewoutLabs/arc-cleaner/commit/fd6d2b9a52fa0fc06f576af69cc7deb641326274))
+* **deps:** update module github.com/docker/docker to v28.2.2+incompatible ([#97](https://github.com/WielewoutLabs/arc-cleaner/issues/97)) ([3f0a5d4](https://github.com/WielewoutLabs/arc-cleaner/commit/3f0a5d4988c5814bc7ae5d2e3e711132fa8266ba))
+* **deps:** update module github.com/docker/docker to v28.3.0+incompatible ([#114](https://github.com/WielewoutLabs/arc-cleaner/issues/114)) ([38d7815](https://github.com/WielewoutLabs/arc-cleaner/commit/38d781556dcede760b81315b0b1eb7646e03cf1f))
+* **deps:** update module github.com/docker/docker to v28.3.1+incompatible ([#119](https://github.com/WielewoutLabs/arc-cleaner/issues/119)) ([ed2eb7e](https://github.com/WielewoutLabs/arc-cleaner/commit/ed2eb7e853c16e490b2371701a62c129240a7ec2))
+
 ## [0.3.2](https://github.com/WielewoutLabs/arc-cleaner/compare/v0.3.1...v0.3.2) (2025-05-22)
 
 
