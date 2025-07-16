@@ -1,4 +1,4 @@
-FROM golang:alpine@sha256:d3150d82acdb4409a503f6745acaed7f5b5ca3c09c9857dcce627f0bda20c095
+FROM golang:alpine@sha256:9c4b616be9d26e4762219223331bab5db98649e4be1f6badeac3f7c00a340e3f
 
 # renovate: github_repository=golangci/golangci-lint
 ARG GOLANGCI_LINT_VERSION=2.2.2
