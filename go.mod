@@ -4,7 +4,7 @@ go 1.24.5
 
 require (
 	github.com/actions/actions-runner-controller v0.27.7-0.20250516142106-1dbb88cb9ee8
-	github.com/cucumber/godog v0.15.0
+	github.com/cucumber/godog v0.15.1
 	github.com/docker/docker v28.3.2+incompatible
 	github.com/mittwald/go-helm-client v0.12.18
 	github.com/spf13/cobra v1.9.1
@@ -129,7 +129,7 @@ require (
 	github.com/sourcegraph/conc v0.3.0 // indirect
 	github.com/spf13/afero v1.12.0 // indirect
 	github.com/spf13/cast v1.7.1 // indirect
-	github.com/spf13/pflag v1.0.6 // indirect
+	github.com/spf13/pflag v1.0.7 // indirect
 	github.com/subosito/gotenv v1.6.0 // indirect
 	github.com/tklauser/go-sysconf v0.3.12 // indirect
 	github.com/tklauser/numcpus v0.6.1 // indirect
