@@ -11,7 +11,7 @@ permissions:
 
 env:
   # renovate:
-  devcontainer: ghcr.io/wielewoutlabs/arc-cleaner-dev:edge@sha256:9996297172922a97f1ec1a9ed1b46651078feb3903f24064104983eb2d07d06b
+  devcontainer: ghcr.io/wielewoutlabs/arc-cleaner-dev:edge@sha256:d71582bb42ed17dde56e5bbe4de6799763e0698079cf0ae141e039db1d3f0133
   workdir: /__w/arc-cleaner/arc-cleaner
 
 jobs:
