@@ -1,5 +1,24 @@
 # Changelog
 
+## [0.3.3](https://github.com/WielewoutLabs/arc-cleaner/compare/v0.3.2...v0.3.3) (2025-08-14)
+
+
+### Bug Fixes
+
+* **deps:** update kubernetes packages to v0.33.2 ([#113](https://github.com/WielewoutLabs/arc-cleaner/issues/113)) ([34f6865](https://github.com/WielewoutLabs/arc-cleaner/commit/34f6865351f0255fdc414dafd0c96ef3e61cada5))
+* **deps:** update kubernetes packages to v0.33.3 ([#134](https://github.com/WielewoutLabs/arc-cleaner/issues/134)) ([faae4f0](https://github.com/WielewoutLabs/arc-cleaner/commit/faae4f012f54c3df258e86d33a256088f27f6002))
+* **deps:** update kubernetes packages to v0.33.4 ([#158](https://github.com/WielewoutLabs/arc-cleaner/issues/158)) ([b48ffff](https://github.com/WielewoutLabs/arc-cleaner/commit/b48ffffcc8043119796aba53fcfc713fe1862b39))
+* **deps:** update module github.com/cucumber/godog to v0.15.1 ([#137](https://github.com/WielewoutLabs/arc-cleaner/issues/137)) ([4982808](https://github.com/WielewoutLabs/arc-cleaner/commit/498280822b5a6f69d159cb7cab3cd95041c556d0))
+* **deps:** update module github.com/docker/docker to v28.2.0+incompatible ([#94](https://github.com/WielewoutLabs/arc-cleaner/issues/94)) ([d451496](https://github.com/WielewoutLabs/arc-cleaner/commit/d451496c4ac3d3d20698ad245c658384a4fca2f5))
+* **deps:** update module github.com/docker/docker to v28.2.1+incompatible ([#96](https://github.com/WielewoutLabs/arc-cleaner/issues/96)) ([fd6d2b9](https://github.com/WielewoutLabs/arc-cleaner/commit/fd6d2b9a52fa0fc06f576af69cc7deb641326274))
+* **deps:** update module github.com/docker/docker to v28.2.2+incompatible ([#97](https://github.com/WielewoutLabs/arc-cleaner/issues/97)) ([3f0a5d4](https://github.com/WielewoutLabs/arc-cleaner/commit/3f0a5d4988c5814bc7ae5d2e3e711132fa8266ba))
+* **deps:** update module github.com/docker/docker to v28.3.0+incompatible ([#114](https://github.com/WielewoutLabs/arc-cleaner/issues/114)) ([38d7815](https://github.com/WielewoutLabs/arc-cleaner/commit/38d781556dcede760b81315b0b1eb7646e03cf1f))
+* **deps:** update module github.com/docker/docker to v28.3.1+incompatible ([#119](https://github.com/WielewoutLabs/arc-cleaner/issues/119)) ([ed2eb7e](https://github.com/WielewoutLabs/arc-cleaner/commit/ed2eb7e853c16e490b2371701a62c129240a7ec2))
+* **deps:** update module github.com/docker/docker to v28.3.2+incompatible ([#124](https://github.com/WielewoutLabs/arc-cleaner/issues/124)) ([96d0b19](https://github.com/WielewoutLabs/arc-cleaner/commit/96d0b192e09d6e38846245636d249aa959bea1d1))
+* **deps:** update module github.com/docker/docker to v28.3.3+incompatible ([#140](https://github.com/WielewoutLabs/arc-cleaner/issues/140)) ([f96de9a](https://github.com/WielewoutLabs/arc-cleaner/commit/f96de9a85f054340b63d3588613b43ad77100353))
+* **deps:** update module github.com/mittwald/go-helm-client to v0.12.18 ([#123](https://github.com/WielewoutLabs/arc-cleaner/issues/123)) ([7327737](https://github.com/WielewoutLabs/arc-cleaner/commit/7327737a62656c812c07b895a9f5905a3b7b22e2))
+* **deps:** update testcontainers-go monorepo to v0.38.0 ([#127](https://github.com/WielewoutLabs/arc-cleaner/issues/127)) ([a276841](https://github.com/WielewoutLabs/arc-cleaner/commit/a276841ce7f27e609b097724f37d9a90272bbb30))
+
 ## [0.3.2](https://github.com/WielewoutLabs/arc-cleaner/compare/v0.3.1...v0.3.2) (2025-05-22)
 
 
