@@ -1,7 +1,7 @@
 FROM golang:alpine@sha256:b6ed3fd0452c0e9bcdef5597f29cc1418f61672e9d3a2f55bf02e7222c014abd
 
 # renovate: github_repository=golangci/golangci-lint
-ARG GOLANGCI_LINT_VERSION=2.4.0
+ARG GOLANGCI_LINT_VERSION=2.5.0
 # renovate: github_repository=helm/chart-releaser
 ARG HELM_CHART_RELEASER_VERSION=1.8.1
 
