@@ -5,7 +5,7 @@ go 1.25.1
 require (
 	github.com/actions/actions-runner-controller v0.27.7-0.20250516142106-1dbb88cb9ee8
 	github.com/cucumber/godog v0.15.1
-	github.com/docker/docker v28.4.0+incompatible
+	github.com/docker/docker v28.5.0+incompatible
 	github.com/mittwald/go-helm-client v0.12.18
 	github.com/spf13/cobra v1.10.1
 	github.com/spf13/viper v1.21.0
