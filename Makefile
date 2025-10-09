@@ -33,7 +33,7 @@ ifeq ($(LOCAL_DEVCONTAINER),true)
 		DEVCONTAINER ?= ghcr.io/wielewoutlabs/arc-cleaner-dev:$(DEVCONTAINER_TAG)
 else
 		# renovate:
-		DEVCONTAINER ?= ghcr.io/wielewoutlabs/arc-cleaner-dev:edge@sha256:2f0e3d32258e9abe19e81e230ed9389f7c90ef442190fbdbe5a4e8c2fe9020f7
+		DEVCONTAINER ?= ghcr.io/wielewoutlabs/arc-cleaner-dev:edge@sha256:1942db6410d8844cd8d5b18fa739d404aee71cc4500e1c2a54c83214c531242f
 endif
 DEVCONTAINER_NAME := arc-cleaner-dev
 DEVCONTAINER_WORKDIR := /go/src/github.com/wielewoutlabs/arc-cleaner/
