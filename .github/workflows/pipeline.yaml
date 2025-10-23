@@ -25,7 +25,7 @@ jobs:
       - name: Release please
         if: github.ref_type == 'branch' && github.ref_name == 'main'
         id: release_please
-        uses: googleapis/release-please-action@v4.3.0
+        uses: googleapis/release-please-action@v4.4.0
         with:
           release-type: go
           target-branch: ${{ github.ref_name }}
