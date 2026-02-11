@@ -1,6 +1,6 @@
 module github.com/wielewoutlabs/arc-cleaner
 
-go 1.25.7
+go 1.26.0
 
 require (
 	github.com/actions/actions-runner-controller v0.27.7-0.20250516142106-1dbb88cb9ee8
