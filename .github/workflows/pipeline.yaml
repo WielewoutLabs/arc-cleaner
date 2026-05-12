@@ -32,7 +32,7 @@ jobs:
           config-file: .github/release-please.json
 
       - name: Checkout
-        uses: actions/checkout@v5.0.1
+        uses: actions/checkout@v6.0.2
       - name: Filter paths
         if: github.event_name != 'workflow_dispatch'
         id: paths_filter
@@ -80,7 +80,7 @@ jobs:
     runs-on: ubuntu-24.04
     steps:
       - name: Checkout
-        uses: actions/checkout@v5.0.1
+        uses: actions/checkout@v6.0.2
       - name: Docker meta
         id: meta
         uses: docker/metadata-action@v5.10.0
@@ -133,7 +133,7 @@ jobs:
         - /var/run/docker.sock:/var/run/docker.sock
     steps:
       - name: Checkout
-        uses: actions/checkout@v5.0.1
+        uses: actions/checkout@v6.0.2
       - name: Make workdir safe
         run: git config --global --add safe.directory ${{ env.workdir }}
       - name: Build
@@ -236,7 +236,7 @@ jobs:
         - /var/run/docker.sock:/var/run/docker.sock
     steps:
       - name: Checkout
-        uses: actions/checkout@v5.0.1
+        uses: actions/checkout@v6.0.2
       - name: Make workdir safe
         run: git config --global --add safe.directory ${{ env.workdir }}
       - name: Test
@@ -329,7 +329,7 @@ jobs:
 
       - name: Checkout
         if: needs.vars.outputs.is_release == 'true'
-        uses: actions/checkout@v5.0.1
+        uses: actions/checkout@v6.0.2
         with:
           fetch-depth: 0
       - name: Make workdir safe
